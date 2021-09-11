@@ -1,8 +1,9 @@
 {
   "name": "theauthapi",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Client library for TheAuthAPI.com",
   "main": "index.js",
+  
   "scripts": {
     "dependencies": "yarn",
     "size": "size-limit",
@@ -19,7 +20,7 @@
     "url": "git+https://github.com/thatapicompany/theauthapi.git"
   },
   "author": "Aden Forshaw",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/thatapicompany/theauthapi/issues"
   },
