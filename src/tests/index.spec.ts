@@ -1,8 +1,7 @@
 import TheAuthAPI from "../index";
-import express from "express";
 import { Server } from "http";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const version = require("../../package.json").version;
+import testServer from "./testServer/server";
+import { response } from "express";
 
 const port = 4063;
 
@@ -16,52 +15,20 @@ const createClient = (options?: any) => {
   return new TheAuthAPI("access_key", options);
 };
 
-describe("index.ts", () => {
+describe("ApiKeys", () => {
   let server: Server;
   beforeAll(() => {
-    server = express()
-      .get("/api-keys/:key", (req, res) => {
-        const key = req.params.key;
-        const accessKey = req.header("x-api-key");
-        if (!accessKey) {
-          return res.status(400).json({
-            error: { message: "missing write key" },
-          });
-        }
-
-        if (!key) {
-          return res.status(400).json({
-            error: { message: "missing api-key" },
-          });
-        }
-
-        const ua = req.headers["user-agent"];
-        if (ua !== `theauthapi-client-node/${version}`) {
-          return res.status(400).json({
-            error: { message: "invalid user-agent" },
-          });
-        }
-
-        return res.json({
-          key: "KGTSsxbDndjRRcpJGuQQp2or9UmQkqRrVQpCWgQruIXnvnNatmfdmOTcsgYnNwnH",
-          name: "My customers first Api Key",
-          customMetaData: {},
-          customAccountId: "acc-id",
-          env: "live",
-          createdAt: "2022-03-16T10:34:23.353Z",
-          updatedAt: "2022-03-16T10:34:23.353Z",
-        });
-      })
-      .listen(port);
+    server = testServer.listen(port);
   });
 
   afterAll(() => {
     server.close();
   });
-
-  it("should authenticate a valid api-key", async () => {
+  it("should authenticate a valid key [legacy]", async () => {
     const client = createClient();
-    const data = await client.authenticateAPIKeyV2("live_access_zBA6cvuEbJEUhhDIWwuErXHLnwvWqtcqe2ajfV3RVVZvD6lc6xDUaSsSZL1fk53a");
+    const data: any = await client.authenticateAPIKey(
+      "live_access_zBA6cvuEbJEUhhDIWwuErXHLnwvWqtcqe2ajfV3RVVZvD6lc6xDUaSsSZL1fk53a"
+    );
     expect(data.name).toEqual("My customers first Api Key");
     expect(data.key).toEqual(
       "KGTSsxbDndjRRcpJGuQQp2or9UmQkqRrVQpCWgQruIXnvnNatmfdmOTcsgYnNwnH"
