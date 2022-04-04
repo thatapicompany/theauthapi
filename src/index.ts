@@ -1,17 +1,13 @@
-import axios from "axios";
 import assert from "assert";
-import axiosRetry from "axios-retry";
-import NodeCache from "node-cache";
 import removeSlash from "remove-trailing-slash";
-import isString from "lodash.isstring";
-import ms from "ms";
+
+import ApiRequest from "./services/ApiRequest/ApiRequest";
+import { validateString } from "./util";
+import ApiKeys from "./endpoints/ApiKeys/ApiKeys";
+import { HttpMethod } from "./services/ApiRequest/HttpMethod";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
-
-const version =
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  process.env.npm_package_version || require("../package.json").version;
 
 type Options = {
   host?: string;
@@ -21,23 +17,14 @@ type Options = {
   retryCount?: number;
 };
 
-type ValidateApiKeyResponse = {
-  key: string;
-  name: string;
-  customMetaData: string;
-  customAccountId: string;
-  env: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
 class TheAuthAPI {
   queue: [];
   accessKey: string;
   host: string;
   timeout: number | string | undefined;
   cacheTTL: number;
-  cache: NodeCache;
+  api: ApiRequest;
+  apiKeys: ApiKeys;
 
   /**
    * Initialize a new `Analytics` with your Segment project's `writeKey` and an
@@ -58,6 +45,11 @@ class TheAuthAPI {
     this.host = removeSlash(options?.host || "https://api.theauthapi.com");
     this.timeout = options?.timeout;
     this.cacheTTL = options?.cacheTTL ?? 60;
+    this.api = new ApiRequest({
+      accessKey: this.accessKey,
+      host: this.host,
+    });
+    this.apiKeys = new ApiKeys(this.api);
 
     Object.defineProperty(this, "enable", {
       configurable: false,
@@ -65,43 +57,6 @@ class TheAuthAPI {
       enumerable: true,
       value: typeof options?.enable === "boolean" ? options.enable : true,
     });
-
-    axiosRetry(axios, {
-      retries: options?.retryCount ?? 3,
-      retryCondition: this._isErrorRetryable,
-      retryDelay: axiosRetry.exponentialDelay,
-    });
-
-    this.cache = new NodeCache({
-      stdTTL: this.cacheTTL,
-      checkperiod: this.cacheTTL * 0.2,
-      useClones: false,
-    });
-  }
-
-  async authenticateAPIKeyV2(key: string) {
-    this._validate(key);
-    try {
-      const { data } = await axios.get<ValidateApiKeyResponse>(
-        `${this.host}/api-keys/${key}`,
-        { headers: this._generateHeaders() }
-      );
-      return data;
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        throw new Error(error.response.statusText);
-      } else {
-        throw error;
-      }
-    }
-  }
-
-  _generateHeaders() {
-    return {
-      "user-agent": `theauthapi-client-node/${version}`,
-      "x-api-key": this.accessKey,
-      "api-key": this.accessKey,
-    };
   }
 
   /*
@@ -111,7 +66,7 @@ class TheAuthAPI {
     key: string,
     callback?: (err: any, data: any) => any
   ) {
-    this._validate(key);
+    validateString("key", key);
 
     const cb = callback || noop;
     const done = (err: any) => {
@@ -124,58 +79,20 @@ class TheAuthAPI {
       sentAt: new Date().getTime(),
     };
 
-    const req: any = {
-      method: "POST",
-      url: `${this.host}/auth/authenticate`,
-      data,
-      headers: this._generateHeaders(),
-    };
-
-    if (this.timeout) {
-      req.timeout =
-        typeof this.timeout === "string" ? ms(this.timeout) : this.timeout;
-    }
-
     try {
-      const data = (await axios(req)).data;
-      done(data);
-      return data;
-    } catch (err) {
-      if (axios.isAxiosError(err) && err.response) {
+      const key = await this.api.request(
+        HttpMethod.POST,
+        "/auth/authenticate",
+        data
+      );
+      done(key);
+      return key;
+    } catch (err: any) {
+      if (err.response) {
         const error = new Error(err.response.statusText);
         return done(error);
       }
       done(err);
-    }
-  }
-
-  _isErrorRetryable(error: any) {
-    // Retry Network Errors.
-    if (axiosRetry.isNetworkError(error)) {
-      return true;
-    }
-
-    if (!error.response) {
-      // Cannot determine if the request can be retried
-      return false;
-    }
-
-    // Retry Server Errors (5xx).
-    if (error.response.status >= 500 && error.response.status <= 599) {
-      return true;
-    }
-
-    // Retry if rate limited.
-    if (error.response.status === 429) {
-      return true;
-    }
-
-    return false;
-  }
-
-  _validate(key: string) {
-    if (!key || !isString(key)) {
-      throw new Error("must pass a string");
     }
   }
 }
