@@ -1,7 +1,6 @@
 import TheAuthAPI from "../index";
 import { Server } from "http";
 import testServer from "./testServer/server";
-import { response } from "express";
 
 const port = 4063;
 
@@ -15,7 +14,7 @@ const createClient = (options?: any) => {
   return new TheAuthAPI("access_key", options);
 };
 
-describe("ApiKeys", () => {
+describe("index", () => {
   let server: Server;
   beforeAll(() => {
     server = testServer.listen(port);
@@ -27,15 +26,10 @@ describe("ApiKeys", () => {
   it("should authenticate a valid key [legacy]", async () => {
     const client = createClient();
     const data: any = await client.authenticateAPIKey(
-      "live_access_zBA6cvuEbJEUhhDIWwuErXHLnwvWqtcqe2ajfV3RVVZvD6lc6xDUaSsSZL1fk53a"
+      "aaa13d30-135e-11ec-8e0f-f1de8e89"
     );
-    expect(data.name).toEqual("My customers first Api Key");
-    expect(data.key).toEqual(
-      "KGTSsxbDndjRRcpJGuQQp2or9UmQkqRrVQpCWgQruIXnvnNatmfdmOTcsgYnNwnH"
-    );
-    expect(data.createdAt).toEqual("2022-03-16T10:34:23.353Z");
-    expect(data.updatedAt).toEqual("2022-03-16T10:34:23.353Z");
-    expect(data.env).toEqual("live");
+    expect(data.customUserId).toEqual("my-user-id");
     expect(data.customAccountId).toEqual("acc-id");
-  });
+    expect(data.authenticated).toBeTruthy();
+  }, 30000);
 });

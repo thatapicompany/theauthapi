@@ -9,13 +9,16 @@ export const authRoutes = router.post("/authenticate", (request, response) => {
       message: "missing api_key",
     });
   }
+  if (credentials.api_key.length !== 32) {
+    return response.json({
+      message: "api_key must have a length of 32",
+    });
+  }
+
   return response.json({
-    key: "KGTSsxbDndjRRcpJGuQQp2or9UmQkqRrVQpCWgQruIXnvnNatmfdmOTcsgYnNwnH",
-    name: "My customers first Api Key",
     customMetaData: {},
     customAccountId: "acc-id",
-    env: "live",
-    createdAt: "2022-03-16T10:34:23.353Z",
-    updatedAt: "2022-03-16T10:34:23.353Z",
+    customUserId: "my-user-id",
+    authenticated: true,
   });
 });
