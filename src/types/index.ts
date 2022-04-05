@@ -4,8 +4,8 @@ export type ApiKey = {
   customMetaData: string;
   customAccountId: string;
   env: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type RateLimitConfiguration = {

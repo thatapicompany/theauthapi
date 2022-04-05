@@ -29,12 +29,13 @@ describe("ApiKeys", () => {
     const data = await client.apiKeys.authenticateKey(
       "live_access_zBA6cvuEbJEUhhDIWwuErXHLnwvWqtcqe2ajfV3RVVZvD6lc6xDUaSsSZL1fk53a"
     );
+    console.log('day', data.createdAt.getDate(), 'month', data.createdAt.getMonth())
     expect(data.name).toEqual("My customers first Api Key");
     expect(data.key).toEqual(
       "KGTSsxbDndjRRcpJGuQQp2or9UmQkqRrVQpCWgQruIXnvnNatmfdmOTcsgYnNwnH"
     );
-    expect(data.createdAt).toEqual("2022-03-16T10:34:23.353Z");
-    expect(data.updatedAt).toEqual("2022-03-16T10:34:23.353Z");
+    expect(data.createdAt).toEqual(new Date("2022-03-16T10:34:23.353Z"));
+    expect(data.updatedAt).toEqual(new Date("2022-03-16T10:34:23.353Z"));
     expect(data.env).toEqual("live");
     expect(data.customAccountId).toEqual("acc-id");
   });

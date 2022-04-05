@@ -97,4 +97,4 @@ class TheAuthAPI {
   }
 }
 
-export = TheAuthAPI;
+export default TheAuthAPI;
