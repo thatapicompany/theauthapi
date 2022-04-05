@@ -30,3 +30,26 @@ export type UpdateApiKeyInput = {
   customMetaData?: object;
   customAccountId?: string;
 };
+
+export enum AuthedEntityType {
+  USER = "USER",
+  ACCESS_KEY = "ACCESS_KEY",
+}
+
+export type AuthBaseEntity = {
+  isActive: boolean;
+  createdBy: string;
+  createdByType?: AuthedEntityType;
+  createdIn: string;
+  lastChangedBy: string;
+  lastChangedByType?: AuthedEntityType;
+  updatedAt: Date;
+  createdAt: Date;
+};
+
+export type Project = AuthBaseEntity & {
+  id: string;
+  name: string;
+  accountId: string;
+  env: string;
+};

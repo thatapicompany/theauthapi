@@ -5,6 +5,7 @@ import ApiRequest from "./services/ApiRequest/ApiRequest";
 import { validateString } from "./util";
 import ApiKeys from "./endpoints/ApiKeys/ApiKeys";
 import { HttpMethod } from "./services/ApiRequest/HttpMethod";
+import Projects from "./endpoints/Projects/Projects";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
@@ -25,6 +26,7 @@ class TheAuthAPI {
   cacheTTL: number;
   api: ApiRequest;
   apiKeys: ApiKeys;
+  projects: Projects;
 
   /**
    * Initialize a new `Analytics` with your Segment project's `writeKey` and an
@@ -50,6 +52,7 @@ class TheAuthAPI {
       host: this.host,
     });
     this.apiKeys = new ApiKeys(this.api);
+    this.projects = new Projects(this.api);
 
     Object.defineProperty(this, "enable", {
       configurable: false,
