@@ -60,4 +60,13 @@ export const projectRoutes = router
       });
     }
     return response.json(true);
+  })
+  .post("/", (request, response) => {
+    const { name, accountId } = request.body;
+    if (!accountId || !name) {
+      return response.json({
+        message: "missing name or accountId",
+      });
+    }
+    return response.json(projects[0]);
   });

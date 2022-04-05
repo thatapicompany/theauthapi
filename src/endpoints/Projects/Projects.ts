@@ -36,6 +36,15 @@ class Projects implements ProjectsInterface {
       `${this.endpoint}/${projectId}`
     );
   }
+
+  async createProject(name: string, accountId: string): Promise<Project> {
+    validateString("name", name);
+    validateString("accountId", accountId);
+    return await this.api.request<Project>(HttpMethod.POST, this.endpoint, {
+      name,
+      accountId,
+    });
+  }
 }
 
 export default Projects;
