@@ -51,4 +51,13 @@ export const projectRoutes = router
       });
     }
     return response.json(projects[1]);
+  })
+  .delete("/:id", (request, response) => {
+    const { id } = request.params;
+    if (!id) {
+      return response.json({
+        message: "missing projectId",
+      });
+    }
+    return response.json(true);
   });

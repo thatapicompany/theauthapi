@@ -28,6 +28,14 @@ class Projects implements ProjectsInterface {
       `${this.endpoint}/${projectId}`
     );
   }
+
+  async deleteProject(projectId: string): Promise<boolean> {
+    validateString("projectId", projectId);
+    return await this.api.request<boolean>(
+      HttpMethod.DELETE,
+      `${this.endpoint}/${projectId}`
+    );
+  }
 }
 
 export default Projects;

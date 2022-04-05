@@ -59,4 +59,10 @@ describe("Projects", () => {
       })
     );
   });
+
+  it("should delete a project", async () => {
+    const client = createClient();
+    const project = await client.projects.deleteProject("my-project-id");
+    expect(project).toBeTruthy();
+  })
 });
