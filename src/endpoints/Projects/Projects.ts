@@ -13,11 +13,19 @@ class Projects implements ProjectsInterface {
     this.endpoint = "/projects";
   }
 
-  async getProjects(accountId: string) {
+  async getProjects(accountId: string): Promise<Project[]> {
     validateString("accountId", accountId);
     return await this.api.request<Project[]>(
       HttpMethod.GET,
       `${this.endpoint}?accountId=${accountId}`
+    );
+  }
+
+  async getProject(projectId: string): Promise<Project> {
+    validateString("projectId", projectId);
+    return await this.api.request<Project>(
+      HttpMethod.GET,
+      `${this.endpoint}/${projectId}`
     );
   }
 }

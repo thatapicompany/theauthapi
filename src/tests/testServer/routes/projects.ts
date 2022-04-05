@@ -33,13 +33,22 @@ const projects = [
   },
 ];
 
-export const projectRoutes = router.get("/", (request, response) => {
-  const { accountId } = request.query;
-  if (!accountId) {
-    return response.json({
-      message: "missing accountId",
-    });
-  }
-
-  return response.json(projects);
-});
+export const projectRoutes = router
+  .get("/", (request, response) => {
+    const { accountId } = request.query;
+    if (!accountId) {
+      return response.json({
+        message: "missing accountId",
+      });
+    }
+    return response.json(projects);
+  })
+  .get("/:id", (request, response) => {
+    const { id } = request.params;
+    if (!id) {
+      return response.json({
+        message: "missing projectId",
+      });
+    }
+    return response.json(projects[1]);
+  });

@@ -43,4 +43,20 @@ describe("Projects", () => {
       ])
     );
   });
+
+  it("should get a project using a projectId", async () => {
+    const client = createClient();
+    const project = await client.projects.getProject("project-id-2");
+    expect(project).toEqual(
+      expect.objectContaining({
+        isActive: true,
+        updatedAt: new Date("2022-04-02T21:02:14.808Z"),
+        createdAt: new Date("2022-04-02T21:02:14.808Z"),
+        id: "project-id-2",
+        name: "Hulu",
+        accountId: "my-account-id-2",
+        env: "live",
+      })
+    );
+  });
 });
