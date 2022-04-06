@@ -2,18 +2,15 @@
   "name": "theauthapi",
   "version": "1.0.1",
   "description": "Client library for TheAuthAPI.com",
-  "main": "index.js",
-  
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "dependencies": "yarn",
-    "size": "size-limit",
-    "test": "standard && nyc ava",
-    "report-coverage": "nyc report --reporter=lcov > coverage.lcov && codecov",
+    "test": "jest --runInBand",
+    "test:coverage": "jest --coverage --runInBand",
     "np": "np --no-publish",
     "release": "yarn run np",
-    "babel-node": "babel-node --presets='@babel/preset-env'",
-    "dev": "nodemon --exec npm run babel-node -- src/app.js",
-    "test-mocha": "ava mocha"
+    "build": "tsc",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -29,31 +26,39 @@
     "assert": "^2.0.0",
     "axios": "^0.21.4",
     "axios-retry": "^3.1.9",
-    "core-js": "^3.17.3",
     "lodash.isstring": "^4.0.1",
+    "lodash.omit": "^4.5.0",
     "ms": "^2.1.3",
-    "node-cache": "^5.1.2",
-    "regenerator-runtime": "^0.13.9",
     "remove-trailing-slash": "^0.1.1"
   },
   "devDependencies": {
-    "ava": "^3.15.0",
-    "basic-auth": "^2.0.1",
-    "body-parser": "^1.17.1",
-    "chai": "^4.3.4",
-    "codecov": "^3.0.0",
-    "commander": "^5.1.0",
-    "delay": "^4.2.0",
+    "@size-limit/preset-small-lib": "^7.0.8",
+    "@types/basic-auth": "^1.1.3",
+    "@types/express": "^4.17.13",
+    "@types/jest": "^27.4.1",
+    "@types/lodash.isstring": "^4.0.6",
+    "@types/lodash.omit": "^4.5.6",
+    "@types/ms": "^0.7.31",
+    "@types/node": "^17.0.23",
+    "@typescript-eslint/eslint-plugin": "^5.17.0",
+    "@typescript-eslint/parser": "^5.17.0",
+    "body-parser": "^1.20.0",
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^8.5.0",
     "express": "^4.15.2",
-    "husky": "^3.0.4",
-    "mocha": "^9.1.1",
-    "nyc": "^14.1.1",
-    "pify": "^4.0.1",
-    "sinon": "^7.3.2",
-    "sinon-chai": "^3.7.0",
+    "jest": "^27.5.1",
+    "prettier": "2.6.2",
     "size-limit": "^4.11.0",
-    "snyk": "^1.328.0",
-    "standard": "^12.0.1",
-    "supertest": "^6.1.6"
+    "ts-jest": "^27.1.4",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
+  },
+  "ava": {
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
   }
 }
