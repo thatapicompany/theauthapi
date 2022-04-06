@@ -69,4 +69,19 @@ export const projectRoutes = router
       });
     }
     return response.json(projects[0]);
+  })
+  .patch("/:id", (request, response) => {
+    const { name } = request.body;
+    const { id } = request.params;
+    if (!id) {
+      return response.json({
+        message: "missing projectId",
+      });
+    }
+    if (!name) {
+      return response.json({
+        message: "missing name",
+      });
+    }
+    return response.json({ ...projects[0], name });
   });

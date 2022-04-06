@@ -84,4 +84,22 @@ describe("Projects", () => {
       })
     );
   });
+
+  it("should update a project", async () => {
+    const client = createClient();
+    const project = await client.projects.updateProject("project-id-1", {
+      name: "my-updated-project-1",
+    });
+    expect(project).toEqual(
+      expect.objectContaining({
+        isActive: true,
+        updatedAt: new Date("2022-04-05T21:42:58.054Z"),
+        createdAt: new Date("2022-04-05T21:42:58.054Z"),
+        id: "project-id-1",
+        name: "my-updated-project-1",
+        accountId: "my-account-id",
+        env: "live",
+      })
+    );
+  });
 });

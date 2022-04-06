@@ -1,5 +1,5 @@
 import ApiRequest from "../../services/ApiRequest/ApiRequest";
-import { Project } from "../../types";
+import { Project, UpdateProjectInput } from "../../types";
 import { HttpMethod } from "../../services/ApiRequest/HttpMethod";
 import { validateString } from "../../util";
 import { ProjectsInterface } from "./ProjectsInterface";
@@ -44,6 +44,18 @@ class Projects implements ProjectsInterface {
       name,
       accountId,
     });
+  }
+
+  async updateProject(
+    projectId: string,
+    updateTo: UpdateProjectInput
+  ): Promise<Project> {
+    validateString("projectId", projectId);
+    return this.api.request<Project>(
+      HttpMethod.PATCH,
+      `${this.endpoint}/${projectId}`,
+      updateTo
+    );
   }
 }
 

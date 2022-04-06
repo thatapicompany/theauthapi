@@ -53,3 +53,7 @@ export type Project = AuthBaseEntity & {
   accountId: string;
   env: string;
 };
+
+export type UpdateProjectInput = {
+  name: string;
+}
