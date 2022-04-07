@@ -56,4 +56,9 @@ export type Project = AuthBaseEntity & {
 
 export type UpdateProjectInput = {
   name: string;
-}
+};
+
+export type Account = AuthBaseEntity & {
+  id: string;
+  name: string;
+};
