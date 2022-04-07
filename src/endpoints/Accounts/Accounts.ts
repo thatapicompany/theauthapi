@@ -31,6 +31,14 @@ class Accounts implements AccountsInterface {
       name,
     });
   }
+
+  async deleteAccount(accountId: string): Promise<boolean> {
+    validateString("accountId", accountId);
+    return await this.api.request<boolean>(
+      HttpMethod.DELETE,
+      `${this.endpoint}/${accountId}`
+    );
+  }
 }
 
 export default Accounts;

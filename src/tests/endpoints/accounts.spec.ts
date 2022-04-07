@@ -60,7 +60,9 @@ describe("Accounts", () => {
 
   it("should get an account using accountId", async () => {
     const client = createClient();
-    const account = await client.accounts.getAccount("bc3be201-f34b-4278-9f19-4e28ebee2561");
+    const account = await client.accounts.getAccount(
+      "bc3be201-f34b-4278-9f19-4e28ebee2561"
+    );
     expect(account).toEqual(
       expect.objectContaining({
         isActive: true,
@@ -71,5 +73,13 @@ describe("Accounts", () => {
         name: "my first auth account",
       })
     );
+  });
+
+  it("should delete an account", async () => {
+    const client = createClient();
+    const deleted = await client.accounts.deleteAccount(
+      "bc3be201-f34b-4278-9f19-4e28ebee2561"
+    );
+    expect(deleted).toBeTruthy();
   });
 });
