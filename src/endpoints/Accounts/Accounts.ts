@@ -17,6 +17,14 @@ class Accounts implements AccountsInterface {
     return await this.api.request<Account>(HttpMethod.GET, this.endpoint);
   }
 
+  async getAccount(accountId: string): Promise<Account> {
+    validateString("accountId", accountId);
+    return await this.api.request<Account>(
+      HttpMethod.GET,
+      `${this.endpoint}/${accountId}`
+    );
+  }
+
   async createAccount(name: string): Promise<Account> {
     validateString("name", name);
     return await this.api.request<Account>(HttpMethod.POST, this.endpoint, {

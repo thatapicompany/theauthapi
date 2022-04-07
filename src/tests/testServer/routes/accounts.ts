@@ -29,4 +29,13 @@ export const accountsRoutes = router
       });
     }
     return response.json({ ...accounts[0], name });
+  })
+  .get("/:id", (request, response) => {
+    const { id } = request.params;
+    if (!id) {
+      return response.json({
+        message: "missing accountId",
+      });
+    }
+    return response.json(accounts.filter((account) => account.id === id)[0]);
   });
