@@ -17,6 +17,16 @@ const accounts = [
   },
 ];
 
-export const accountsRoutes = router.get("/", (request, response) => {
-  return response.json(accounts);
-});
+export const accountsRoutes = router
+  .get("/", (request, response) => {
+    return response.json(accounts);
+  })
+  .post("/", (request, response) => {
+    const { name } = request.body;
+    if (!name) {
+      return response.json({
+        message: "missing account name",
+      });
+    }
+    return response.json({ ...accounts[0], name });
+  });
