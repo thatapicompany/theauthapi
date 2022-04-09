@@ -82,4 +82,22 @@ describe("Accounts", () => {
     );
     expect(deleted).toBeTruthy();
   });
+
+  it("should update an account", async () => {
+    const client = createClient();
+    const updatedAccount = await client.accounts.updateAccount(
+      "bc3be201-f34b-4278-9f19-4e28ebee2561",
+      "my updated authapi account"
+    );
+    expect(updatedAccount).toEqual(
+      expect.objectContaining({
+        isActive: true,
+        createdBy: "b8264e32-69e7-4980-8afe-19c0559badba",
+        updatedAt: new Date("2022-04-06T23:25:16.391Z"),
+        createdAt: new Date("2022-04-06T23:25:16.391Z"),
+        id: "bc3be201-f34b-4278-9f19-4e28ebee2561",
+        name: "my updated authapi account",
+      })
+    );
+  });
 });

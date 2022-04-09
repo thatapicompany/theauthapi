@@ -1,4 +1,4 @@
-import { response, Router } from "express";
+import { Router } from "express";
 
 const router = Router();
 
@@ -47,4 +47,19 @@ export const accountsRoutes = router
       });
     }
     return response.json(true);
+  })
+  .patch("/:id", (request, response) => {
+    const { name } = request.body;
+    const { id } = request.params;
+    if (!name) {
+      return response.json({
+        message: "missing account name",
+      });
+    }
+    if (!id) {
+      return response.json({
+        message: "missing accountId",
+      });
+    }
+    return response.json({ ...accounts[0], name });
   });

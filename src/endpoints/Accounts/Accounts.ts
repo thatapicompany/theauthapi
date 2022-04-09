@@ -39,6 +39,16 @@ class Accounts implements AccountsInterface {
       `${this.endpoint}/${accountId}`
     );
   }
+
+  async updateAccount(accountId: string, name: string): Promise<Account> {
+    validateString("accountId", accountId);
+    validateString("name", name);
+    return await this.api.request<Account>(
+      HttpMethod.PATCH,
+      `${this.endpoint}/${accountId}`,
+      { name }
+    );
+  }
 }
 
 export default Accounts;
