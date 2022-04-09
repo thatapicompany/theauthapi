@@ -4,6 +4,7 @@
   "description": "Client library for TheAuthAPI.com",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": ["dist"],
   "scripts": {
     "test": "jest --runInBand",
     "test:coverage": "jest --coverage --runInBand",
@@ -52,13 +53,5 @@
     "ts-jest": "^27.1.4",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.3"
-  },
-  "ava": {
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ]
   }
 }
