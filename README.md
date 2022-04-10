@@ -86,9 +86,7 @@ using async/await
 
 ```javascript
 try {
-  const key = await theAuthAPI.apiKeys.authenticateKey(
-    "live_6RfG6w9gXi9ixbPo43gkDeBR2jhtP9QAGsixUaxr1Lgacjchgy7hIYtH2zOZp5Q"
-  );
+  const key = await theAuthAPI.apiKeys.authenticateKey("API_KEY");
   console.log("valid key:", key.key);
 } catch (error) {
   console.log("invalid key!");
