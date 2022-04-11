@@ -3,7 +3,7 @@ import omit from "lodash.omit";
 import ApiRequest from "../../services/ApiRequest/ApiRequest";
 import {ApiKey, ApiKeyInput, UpdateApiKeyInput} from "../../types";
 import { validateString } from "../../util";
-import ApiKeysInterface from "./ApiKeysInterface";
+import { ApiKeysInterface } from "./ApiKeysInterface";
 
 class ApiKeys implements ApiKeysInterface {
   api: ApiRequest;
@@ -65,4 +65,4 @@ class ApiKeys implements ApiKeysInterface {
   }
 }
 
-export = ApiKeys;
+export default ApiKeys;

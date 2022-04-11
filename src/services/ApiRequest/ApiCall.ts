@@ -4,4 +4,4 @@ interface ApiCall {
   request<T>(method: HttpMethod, endpoint: string, payload?: any): Promise<T>
 }
 
-export = ApiCall;
+export default ApiCall;
