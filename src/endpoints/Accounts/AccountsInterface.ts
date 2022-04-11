@@ -1,9 +1,5 @@
 import { Account } from "../../types";
 
 export interface AccountsInterface {
-  getAccounts(): Promise<Account>;
   getAccount(accountId: string): Promise<Account>;
-  createAccount(name: string): Promise<Account>;
-  updateAccount(accountId: string, name: string): Promise<Account>;
-  deleteAccount(accountId: string): Promise<boolean>;
 }

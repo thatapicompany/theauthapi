@@ -23,41 +23,6 @@ describe("Accounts", () => {
   afterAll(() => {
     server.close();
   });
-
-  it("should get all accounts", async () => {
-    const client = createClient();
-    const accounts = await client.accounts.getAccounts();
-    expect(accounts).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          isActive: true,
-          createdBy: "b8264e32-69e7-4980-8afe-19c0559badba",
-          updatedAt: new Date("2022-04-06T23:25:16.391Z"),
-          createdAt: new Date("2022-04-06T23:25:16.391Z"),
-          id: "bc3be201-f34b-4278-9f19-4e28ebee2561",
-          name: "my first auth account",
-        }),
-      ])
-    );
-  });
-
-  it("should create an account", async () => {
-    const client = createClient();
-    const account = await client.accounts.createAccount(
-      "my first auth account"
-    );
-    expect(account).toEqual(
-      expect.objectContaining({
-        isActive: true,
-        createdBy: "b8264e32-69e7-4980-8afe-19c0559badba",
-        updatedAt: new Date("2022-04-06T23:25:16.391Z"),
-        createdAt: new Date("2022-04-06T23:25:16.391Z"),
-        id: "bc3be201-f34b-4278-9f19-4e28ebee2561",
-        name: "my first auth account",
-      })
-    );
-  });
-
   it("should get an account using accountId", async () => {
     const client = createClient();
     const account = await client.accounts.getAccount(
@@ -71,32 +36,6 @@ describe("Accounts", () => {
         createdAt: new Date("2022-04-06T23:25:16.391Z"),
         id: "bc3be201-f34b-4278-9f19-4e28ebee2561",
         name: "my first auth account",
-      })
-    );
-  });
-
-  it("should delete an account", async () => {
-    const client = createClient();
-    const deleted = await client.accounts.deleteAccount(
-      "bc3be201-f34b-4278-9f19-4e28ebee2561"
-    );
-    expect(deleted).toBeTruthy();
-  });
-
-  it("should update an account", async () => {
-    const client = createClient();
-    const updatedAccount = await client.accounts.updateAccount(
-      "bc3be201-f34b-4278-9f19-4e28ebee2561",
-      "my updated authapi account"
-    );
-    expect(updatedAccount).toEqual(
-      expect.objectContaining({
-        isActive: true,
-        createdBy: "b8264e32-69e7-4980-8afe-19c0559badba",
-        updatedAt: new Date("2022-04-06T23:25:16.391Z"),
-        createdAt: new Date("2022-04-06T23:25:16.391Z"),
-        id: "bc3be201-f34b-4278-9f19-4e28ebee2561",
-        name: "my updated authapi account",
       })
     );
   });

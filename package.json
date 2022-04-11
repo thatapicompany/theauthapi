@@ -1,10 +1,12 @@
 {
   "name": "theauthapi",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Client library for TheAuthAPI.com",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "jest --runInBand",
     "test:coverage": "jest --coverage --runInBand",
