@@ -4,4 +4,4 @@ class ApiRequestError extends Error {
   }
 }
 
-export = ApiRequestError;
+export default ApiRequestError;
