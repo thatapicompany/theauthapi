@@ -17,49 +17,12 @@ const accounts = [
   },
 ];
 
-export const accountsRoutes = router
-  .get("/", (request, response) => {
-    return response.json(accounts);
-  })
-  .post("/", (request, response) => {
-    const { name } = request.body;
-    if (!name) {
-      return response.json({
-        message: "missing account name",
-      });
-    }
-    return response.json({ ...accounts[0], name });
-  })
-  .get("/:id", (request, response) => {
-    const { id } = request.params;
-    if (!id) {
-      return response.json({
-        message: "missing accountId",
-      });
-    }
-    return response.json(accounts.filter((account) => account.id === id)[0]);
-  })
-  .delete("/:id", (request, response) => {
-    const { id } = request.params;
-    if (!id) {
-      return response.json({
-        message: "missing accountId",
-      });
-    }
-    return response.json(true);
-  })
-  .patch("/:id", (request, response) => {
-    const { name } = request.body;
-    const { id } = request.params;
-    if (!name) {
-      return response.json({
-        message: "missing account name",
-      });
-    }
-    if (!id) {
-      return response.json({
-        message: "missing accountId",
-      });
-    }
-    return response.json({ ...accounts[0], name });
-  });
+export const accountsRoutes = router.get("/:id", (request, response) => {
+  const { id } = request.params;
+  if (!id) {
+    return response.json({
+      message: "missing accountId",
+    });
+  }
+  return response.json(accounts.filter((account) => account.id === id)[0]);
+});

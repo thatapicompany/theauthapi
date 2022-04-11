@@ -13,40 +13,11 @@ class Accounts implements AccountsInterface {
     this.endpoint = "/accounts";
   }
 
-  async getAccounts(): Promise<Account> {
-    return await this.api.request<Account>(HttpMethod.GET, this.endpoint);
-  }
-
   async getAccount(accountId: string): Promise<Account> {
     validateString("accountId", accountId);
     return await this.api.request<Account>(
       HttpMethod.GET,
       `${this.endpoint}/${accountId}`
-    );
-  }
-
-  async createAccount(name: string): Promise<Account> {
-    validateString("name", name);
-    return await this.api.request<Account>(HttpMethod.POST, this.endpoint, {
-      name,
-    });
-  }
-
-  async deleteAccount(accountId: string): Promise<boolean> {
-    validateString("accountId", accountId);
-    return await this.api.request<boolean>(
-      HttpMethod.DELETE,
-      `${this.endpoint}/${accountId}`
-    );
-  }
-
-  async updateAccount(accountId: string, name: string): Promise<Account> {
-    validateString("accountId", accountId);
-    validateString("name", name);
-    return await this.api.request<Account>(
-      HttpMethod.PATCH,
-      `${this.endpoint}/${accountId}`,
-      { name }
     );
   }
 }
