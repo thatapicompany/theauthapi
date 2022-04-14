@@ -1,5 +1,6 @@
 # Client library for [TheAuthAPI](https://theauthapi.com/)
 
+**Contents**
 - [Client library for TheAuthAPI](#client-library-for-theauthapi)
   - [Installation](#installation)
   - [Configuration](#configuration)
@@ -10,7 +11,10 @@
       - [Example: Creating an API Key](#example-creating-an-api-key)
       - [Typescript](#typescript)
     - [📙 Further Reading](#-further-reading)
-  
+
+**Scalable API Key Management and Auth Control**
+Secure your API with best in class API Key management, user access, all with great analytics.
+
 ## Installation
 
 This library is published on [npm](https://www.npmjs.com/package/theauthapi), you can add it as a dependency using the following
