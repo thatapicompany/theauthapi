@@ -1,6 +1,7 @@
 import TheAuthAPI from "../../index";
 import testServer from "../testServer/server";
 import { Server } from "http";
+import { shouldThrowTypeError } from "../util";
 
 const port = 4063;
 
@@ -29,7 +30,12 @@ describe("ApiKeys", () => {
     const data = await client.apiKeys.authenticateKey(
       "live_access_zBA6cvuEbJEUhhDIWwuErXHLnwvWqtcqe2ajfV3RVVZvD6lc6xDUaSsSZL1fk53a"
     );
-    console.log('day', data.createdAt.getDate(), 'month', data.createdAt.getMonth())
+    console.log(
+      "day",
+      data.createdAt.getDate(),
+      "month",
+      data.createdAt.getMonth()
+    );
     expect(data.name).toEqual("My customers first Api Key");
     expect(data.key).toEqual(
       "KGTSsxbDndjRRcpJGuQQp2or9UmQkqRrVQpCWgQruIXnvnNatmfdmOTcsgYnNwnH"
@@ -98,5 +104,55 @@ describe("ApiKeys", () => {
       "live_TVHW0PVtktylIVObMd8J0sBHb7Ym3ZraObpeT3qxu7YRHig2KxrEIwggn50sBpSZ"
     );
     expect(response).toBeTruthy();
+  });
+
+  it("should validate parameter types", async () => {
+    const client = createClient();
+    await shouldThrowTypeError(() =>
+      client.apiKeys.authenticateKey(undefined as any)
+    );
+    await shouldThrowTypeError(() => client.apiKeys.getKeys(undefined as any));
+    await shouldThrowTypeError(() =>
+      client.apiKeys.deleteKey(undefined as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.apiKeys.createKey(undefined as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.apiKeys.createKey({ projectId: "1" } as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.apiKeys.createKey({ name: "a" } as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.apiKeys.createKey({
+        name: "a",
+        projectId: "1",
+        key: undefined,
+      } as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.apiKeys.createKey({
+        name: "a",
+        projectId: "1",
+        customAccountId: undefined,
+      } as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.apiKeys.createKey({
+        name: "a",
+        projectId: "1",
+        customUserId: undefined,
+      } as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.apiKeys.updateKey(undefined as any, {} as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.apiKeys.updateKey(
+        undefined as any,
+        { name: "a", customAccountId: undefined } as any
+      )
+    );
   });
 });

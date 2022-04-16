@@ -1,7 +1,7 @@
 import { HttpMethod } from "../../services/ApiRequest/HttpMethod";
 import omit from "lodash.omit";
 import ApiRequest from "../../services/ApiRequest/ApiRequest";
-import {ApiKey, ApiKeyInput, UpdateApiKeyInput} from "../../types";
+import { ApiKey, ApiKeyInput, UpdateApiKeyInput } from "../../types";
 import { validateString } from "../../util";
 import { ApiKeysInterface } from "./ApiKeysInterface";
 
@@ -29,26 +29,12 @@ class ApiKeys implements ApiKeysInterface {
   }
 
   async createKey(apiKey: ApiKeyInput) {
-    // validate string properties only
-    for (const [key, value] of Object.entries(
-      omit(apiKey, ["customMetaData", "rateLimitConfigs"])
-    )) {
-      validateString(key, value);
-    }
-    return await this.api.request<ApiKey>(
-      HttpMethod.POST,
-      "/api-keys",
-      apiKey
-    );
+    this.validateCreateKeyInput(apiKey);
+    return await this.api.request<ApiKey>(HttpMethod.POST, "/api-keys", apiKey);
   }
 
   async updateKey(apiKey: string, updateTo: UpdateApiKeyInput) {
-    validateString("apiKey", apiKey);
-    for (const [key, value] of Object.entries(
-      omit(updateTo, "customMetaData")
-    )) {
-      validateString(key, value);
-    }
+    this.validateUpdateKeyInput(apiKey, updateTo);
     return await this.api.request<ApiKey>(
       HttpMethod.PATCH,
       `/api-keys/${apiKey}`,
@@ -62,6 +48,36 @@ class ApiKeys implements ApiKeysInterface {
       HttpMethod.DELETE,
       `/api-keys/${apiKey}`
     );
+  }
+
+  private validateCreateKeyInput(apiKey: ApiKeyInput) {
+    if (!apiKey) {
+      throw new TypeError("apiKey must be an object");
+    }
+    if (!apiKey.name || !apiKey.projectId) {
+      throw TypeError(
+        "apiKey object must contain the properties [name, projectId]"
+      );
+    }
+    // validate string properties only
+    for (const [key, value] of Object.entries(
+      omit(apiKey, ["customMetaData", "rateLimitConfigs"])
+    )) {
+      validateString(key, value);
+    }
+  }
+
+  private validateUpdateKeyInput(apiKey: string, updatedKey: UpdateApiKeyInput) {
+    if (!updatedKey) {
+      throw new TypeError("apiKey must be an object");
+    }
+    if (!updatedKey.name) {
+      throw TypeError(
+        "apiKey object must contain the property [name]"
+      );
+    }
+    validateString("name", apiKey);
+    validateString("updated", updatedKey.name);
   }
 }
 
