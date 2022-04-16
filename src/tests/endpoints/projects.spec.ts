@@ -1,6 +1,8 @@
 import TheAuthAPI from "../../index";
 import testServer from "../testServer/server";
 import { Server } from "http";
+import { shouldThrowTypeError } from "../util";
+import { Environment } from "../../types";
 
 const port = 4063;
 
@@ -68,10 +70,11 @@ describe("Projects", () => {
 
   it("should create a project", async () => {
     const client = createClient();
-    const project = await client.projects.createProject(
-      "project-id-1",
-      "my-account-id"
-    );
+    const project = await client.projects.createProject({
+      name: "test theauthapi project",
+      accountId: "my-account-id",
+      env: Environment.TEST,
+    });
     expect(project).toEqual(
       expect.objectContaining({
         isActive: true,
@@ -100,6 +103,58 @@ describe("Projects", () => {
         accountId: "my-account-id",
         env: "live",
       })
+    );
+  });
+
+  it("should validate parameter types", async () => {
+    const client = createClient();
+    await shouldThrowTypeError(() =>
+      client.projects.getProjects(undefined as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.projects.getProject(undefined as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.projects.deleteProject(undefined as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.projects.createProject(undefined as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.projects.createProject({
+        name: "name",
+        accountId: "account",
+      } as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.projects.createProject({
+        name: "name",
+        env: Environment.LIVE,
+      } as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.projects.createProject({
+        accountId: "account",
+        env: Environment.LIVE,
+      } as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.projects.createProject({
+        name: "name",
+        accountId: "account",
+        env: "unknown",
+      } as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.projects.updateProject(undefined as any, {
+        name: "name",
+      })
+    );
+    await shouldThrowTypeError(() =>
+      client.projects.updateProject("project", undefined as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.projects.updateProject("project", {} as any)
     );
   });
 });
