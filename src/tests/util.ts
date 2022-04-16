@@ -1,6 +1,6 @@
 export async function shouldThrowError(
   cb: any,
-  errorType: ErrorConstructor = Error
+  errorType: any = Error,
 ) {
   async function action(cb: (...args: any) => any) {
     await cb();
