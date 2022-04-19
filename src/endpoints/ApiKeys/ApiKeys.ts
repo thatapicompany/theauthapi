@@ -86,15 +86,15 @@ class ApiKeys implements ApiKeysInterface {
 
   private validateUpdateKeyInput(apiKey: string, updatedKey: UpdateApiKeyInput) {
     if (!updatedKey) {
-      throw new TypeError("apiKey must be an object");
+      throw new TypeError("updatedKey must be an object");
     }
     if (!updatedKey.name) {
       throw TypeError(
-        "apiKey object must contain the property [name]"
+        "updatedKey object must contain the property [name]"
       );
     }
-    validateString("name", apiKey);
-    validateString("updated", updatedKey.name);
+    validateString("apiKey", apiKey);
+    validateString("name", updatedKey.name);
   }
 }
 
