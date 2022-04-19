@@ -1,5 +1,10 @@
 import ApiRequest from "../../services/ApiRequest/ApiRequest";
-import { Project, UpdateProjectInput } from "../../types";
+import {
+  CreateProjectInput,
+  Environment,
+  Project,
+  UpdateProjectInput,
+} from "../../types";
 import { HttpMethod } from "../../services/ApiRequest/HttpMethod";
 import { validateString } from "../../util";
 import { ProjectsInterface } from "./ProjectsInterface";
@@ -37,25 +42,51 @@ class Projects implements ProjectsInterface {
     );
   }
 
-  async createProject(name: string, accountId: string): Promise<Project> {
-    validateString("name", name);
-    validateString("accountId", accountId);
-    return await this.api.request<Project>(HttpMethod.POST, this.endpoint, {
-      name,
-      accountId,
-    });
+  async createProject(project: CreateProjectInput): Promise<Project> {
+    this.validateCreateProjectInput(project);
+    return await this.api.request<Project>(
+      HttpMethod.POST,
+      this.endpoint,
+      project
+    );
   }
 
   async updateProject(
     projectId: string,
-    updateTo: UpdateProjectInput
+    project: UpdateProjectInput
   ): Promise<Project> {
-    validateString("projectId", projectId);
+    this.validateUpdateProjectInput(projectId, project);
     return this.api.request<Project>(
       HttpMethod.PATCH,
       `${this.endpoint}/${projectId}`,
-      updateTo
+      project
     );
+  }
+
+  private validateCreateProjectInput(project: CreateProjectInput) {
+    if (!project) {
+      throw new TypeError("project must be an object");
+    }
+    validateString("name", project.name);
+    validateString("accountId", project.accountId);
+    if (!Object.values(Environment).includes(project.env)) {
+      throw TypeError(
+        `expected env to be one of [${Object.values(Environment).map(
+          (v) => `"${v}"`
+        )}], got: ${project.env}`
+      );
+    }
+  }
+
+  private validateUpdateProjectInput(
+    projectId: string,
+    project: UpdateProjectInput
+  ) {
+    if (!project) {
+      throw new TypeError("project must be an object");
+    }
+    validateString("projectId", projectId);
+    validateString("name", project.name);
   }
 }
 

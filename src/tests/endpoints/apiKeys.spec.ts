@@ -1,6 +1,8 @@
 import TheAuthAPI from "../../index";
 import testServer from "../testServer/server";
 import { Server } from "http";
+import { shouldThrowError, shouldThrowTypeError } from "../util";
+import ApiResponseError from "../../services/ApiRequest/ApiResponseError";
 
 const port = 4063;
 
@@ -24,12 +26,25 @@ describe("ApiKeys", () => {
     server.close();
   });
 
-  it("should authenticate a valid api-key", async () => {
+  it("should check if an apikey is valid", async () => {
     const client = createClient();
-    const data = await client.apiKeys.authenticateKey(
+    const valid = await client.apiKeys.isValidKey(
       "live_access_zBA6cvuEbJEUhhDIWwuErXHLnwvWqtcqe2ajfV3RVVZvD6lc6xDUaSsSZL1fk53a"
     );
-    console.log('day', data.createdAt.getDate(), 'month', data.createdAt.getMonth())
+    const invalid = await client.apiKeys.isValidKey("invalid-key");
+    expect(valid).toBeTruthy();
+    expect(invalid).toBeFalsy();
+    await shouldThrowError(
+      () => client.apiKeys.isValidKey("$"),
+      ApiResponseError
+    );
+  });
+
+  it("should get an apikey", async () => {
+    const client = createClient();
+    const data = await client.apiKeys.getKey(
+      "live_access_zBA6cvuEbJEUhhDIWwuErXHLnwvWqtcqe2ajfV3RVVZvD6lc6xDUaSsSZL1fk53a"
+    );
     expect(data.name).toEqual("My customers first Api Key");
     expect(data.key).toEqual(
       "KGTSsxbDndjRRcpJGuQQp2or9UmQkqRrVQpCWgQruIXnvnNatmfdmOTcsgYnNwnH"
@@ -98,5 +113,56 @@ describe("ApiKeys", () => {
       "live_TVHW0PVtktylIVObMd8J0sBHb7Ym3ZraObpeT3qxu7YRHig2KxrEIwggn50sBpSZ"
     );
     expect(response).toBeTruthy();
+  });
+
+  it("should validate parameter types", async () => {
+    const client = createClient();
+    await shouldThrowTypeError(() =>
+      client.apiKeys.isValidKey(undefined as any)
+    );
+    await shouldThrowTypeError(() => client.apiKeys.getKey(undefined as any));
+    await shouldThrowTypeError(() => client.apiKeys.getKeys(undefined as any));
+    await shouldThrowTypeError(() =>
+      client.apiKeys.deleteKey(undefined as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.apiKeys.createKey(undefined as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.apiKeys.createKey({ projectId: "1" } as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.apiKeys.createKey({ name: "a" } as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.apiKeys.createKey({
+        name: "a",
+        projectId: "1",
+        key: undefined,
+      } as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.apiKeys.createKey({
+        name: "a",
+        projectId: "1",
+        customAccountId: undefined,
+      } as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.apiKeys.createKey({
+        name: "a",
+        projectId: "1",
+        customUserId: undefined,
+      } as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.apiKeys.updateKey(undefined as any, {} as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.apiKeys.updateKey(
+        undefined as any,
+        { name: "a", customAccountId: undefined } as any
+      )
+    );
   });
 });

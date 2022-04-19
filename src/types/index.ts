@@ -54,6 +54,22 @@ export type Project = AuthBaseEntity & {
   env: string;
 };
 
+export enum Environment {
+  LIVE = "live",
+  TEST = "test",
+}
+
+export type CreateProjectInput = {
+  name: string;
+  accountId: string;
+  env: Environment;
+};
+
 export type UpdateProjectInput = {
   name: string;
-}
+};
+
+export type Account = AuthBaseEntity & {
+  id: string;
+  name: string;
+};
