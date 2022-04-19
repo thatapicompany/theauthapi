@@ -1,6 +1,13 @@
+/**
+ *
+ *  Throws when no response was received from the server
+ *  @param message - error message
+ *
+ * */
 class ApiRequestError extends Error {
-  constructor(statusCode: number, message: string) {
-    super(`(${statusCode}): ${message}`);
+  constructor(message: string) {
+    super(message);
+    this.name = 'ApiRequestError'
   }
 }
 

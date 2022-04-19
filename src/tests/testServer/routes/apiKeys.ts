@@ -10,6 +10,19 @@ export const apiKeyRoutes = router
         message: "missing api-key",
       });
     }
+    if (key === "invalid-key") {
+      return response.status(404).json({
+        statusCode: 404,
+        message: "Invalid client key",
+        error: "Not Found",
+      });
+    }
+    // generate 403: user trying to access a key which they don't have access to
+    if (key === "$") {
+      return response.status(403).json({
+        message: "Invalid roles for this account"
+      })
+    }
     return response.json({
       key: "KGTSsxbDndjRRcpJGuQQp2or9UmQkqRrVQpCWgQruIXnvnNatmfdmOTcsgYnNwnH",
       name: "My customers first Api Key",

@@ -5,6 +5,7 @@ import ApiCall from "./ApiCall";
 import ApiRequestError from "./ApiRequestError";
 import axiosRetry from "axios-retry";
 import ms from "ms";
+import ApiResponseError from "./ApiResponseError";
 
 type Config = {
   host: string;
@@ -84,12 +85,12 @@ class ApiRequest implements ApiCall {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          throw new ApiRequestError(
+          throw new ApiResponseError(
             error.response.status,
             error.response.data.message ?? error.response.statusText
           );
         } else if (error.request) {
-          throw new Error(error.request);
+          throw new ApiRequestError(error.message);
         }
       }
       throw error;
