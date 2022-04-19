@@ -1,15 +1,17 @@
 # Client library for [TheAuthAPI](https://theauthapi.com/)
 
 **Contents**
+
 - [Client library for TheAuthAPI](#client-library-for-theauthapi)
   - [Installation](#installation)
   - [Configuration](#configuration)
   - [Usage](#usage)
-      - [Example: Authenticating an api-key](#example-authenticating-an-api-key)
-      - [Example: Listing the projects of an account](#example-listing-the-projects-of-an-account)
-      - [Example: Listing projects and associated API Keys](#example-listing-projects-and-associated-api-keys)
-      - [Example: Creating an API Key](#example-creating-an-api-key)
-      - [Typescript](#typescript)
+    - [Example: Validating an api-key](#example-validating-an-api-key)
+    - [Example: Listing the projects of an account](#example-listing-the-projects-of-an-account)
+    - [Example: Listing projects and associated API Keys](#example-listing-projects-and-associated-api-keys)
+    - [Example: Creating an API Key](#example-creating-an-api-key)
+    - [Handling Errors](#handling-errors)
+    - [Typescript](#typescript)
     - [📙 Further Reading](#-further-reading)
 
 **Scalable API Key Management and Auth Control**
@@ -28,13 +30,29 @@ yarn add theauthapi
 
 ## Configuration
 
-You'll need to configure the library with your `access key` and `account id`, you can grab these from [TheAuthApi](https://app.theauthapi.com/auth/signup) dashboard.
+You'll need to configure the library with your `access key` and `account id`, you can grab these from [TheAuthAPI](https://app.theauthapi.com/dashboard) dashboard.
+
+For further instructions on creating an account, check out our [how to guides](https://thatapicompany.notion.site/The-Auth-API-Knowledge-Base-21660cee84e640729714fad43d9ce546).
+
+### Imports
+
+#### CommonJS
 
 ```javascript
 const TheAuthAPI = require("theauthapi").default;
+```
+
+#### ES Modules
+
+```typescript
+import TheAuthAPI from "theauthapi";
+```
+
+initialize the client using your access key:
+
+```javascript
 const theAuthAPI = new TheAuthAPI("YOUR_ACCESS_KEY");
 ```
-For futher instructions on creating an account, checkout [these docs](https://thatapicompany.notion.site/The-Auth-API-Knowledge-Base-21660cee84e640729714fad43d9ce546).
 
 You can also provide custom options:
 
@@ -46,6 +64,7 @@ const theAuthAPI = new TheAuthAPI("YOUR_ACCESS_KEY", {
 ```
 
 **Full option types:**
+
 ```typescript
 type Options = {
   // server url
@@ -58,14 +77,14 @@ type Options = {
 ```
 
 ## Usage
+
 After initiating the client, you can access endpoint methods using the following pattern:
 `[object instance].[endpoint].[method]`
 
-For example, getting the projects for an account would be: `theAuthApiClient.projects.getProjects("ACCOUNT_ID")`, 
+For example, getting the projects for an account would be: `theAuthApiClient.projects.getProjects("ACCOUNT_ID")`,
 
-Similarly getting the api keys would be:
+Similarly, getting the api keys would be:
 `theAuthApiClient.apiKeys.getKeys("PROJECT_ID")`
-
 
 | endpoint  | attribute | example                                       |
 | --------- | --------- | --------------------------------------------- |
@@ -73,29 +92,34 @@ Similarly getting the api keys would be:
 | /projects | projects  | `client.projects.createProject("MY_PROJECT")` |
 | /accounts | accounts  | `client.accounts.createAccount("MY_ACCOUNT")` |
 
-For details on each endpoints accepted values, please reference these docs: [**COMING SOON**]
+For details on each endpoint accepted values, please reference these docs: [docs.theauthapi.com](https://docs.theauthapi.com/)
 
 All methods return a promise containing the returned JSON as a javascript object. Each method of an endpoint maps HTTP methods to
 
-| HTTP Method | method name | example                                       |
-| ----------- | ----------- | --------------------------------------------- |
-| POST        | create\*    | `client.projects.createProject("PROJECT_NAME")`          |
-| GET         | get\*       | `client.projects.getProject("PROJECT_ID")` |
-| DELETE      | delete\*    | `client.projects.deleteProject("PROJECT_ID")` |
-| PATCH       | update\*    | `client.projects.updateProject("PROJECT_ID", {name: "updated project name"})` |
+| HTTP Method | method name | example                                                                   |
+| ----------- | ----------- | ------------------------------------------------------------------------- |
+| POST        | create\*    | `client.apiKeys.createKey({ name: "KEY_NAME", projectId: "PROJECT_ID" })` |
+| GET         | get\*       | `client.apiKeys.getKeys("PROJECT_ID")`                                    |
+| DELETE      | delete\*    | `client.apiKeys.deleteKey("MY_KEY")`                                      |
+| PATCH       | update\*    | `client.apiKeys.updateKey("MY_KEY", { name: "UPDATED_KEY_NAME" })`        |
 
-#### Example: Authenticating an api-key
+#### Example: Validating an api-key
+
+You can easily validate an API key using `apiKeys.isValidKey` which returns `true` if the key is valid, `false` otherwise.
+`isValidKey` throws an `ApiRequestError` if there's a network issue, it's advised to wrap it in a `try/catch` to handle the potential error
 
 ```javascript
 theAuthAPI.apiKeys
-  .authenticateKey("API_KEY")
-  .then((key) => {
-    // the key is valid
-    console.log(key);
+  .isValidKey("API_KEY")
+  .then((isValidKey) => {
+    if (isValidKey) {
+      console.log("The API is valid!");
+    } else {
+      console.log("Invalid API key!");
+    }
   })
   .catch((error) => {
-    // the key is invalid
-    console.log("invalid key");
+    // handle network error
   });
 ```
 
@@ -103,10 +127,14 @@ theAuthAPI.apiKeys
 
 ```javascript
 try {
-  const key = await theAuthAPI.apiKeys.authenticateKey("API_KEY");
-  console.log("valid key:", key.key);
+  const isValidKey = await theAuthAPI.apiKeys.isValidKey("API_KEY");
+  if (isValidKey) {
+    console.log("The API is valid!");
+  } else {
+    console.log("Invalid API key!");
+  }
 } catch (error) {
-  console.log("invalid key!");
+  // handle network error
 }
 ```
 
@@ -132,52 +160,105 @@ try {
 #### Example: Listing projects and associated API Keys
 
 ```javascript
-  const projects = await theAuthAPI.projects.getProjects(
-    "ACCOUNT_ID"
-  );
-  let allProjects = [];
-  for (let i = 0; i < projects.length; i++) {
-    allProjects.push(
-      theAuthAPI.apiKeys.getKeys(projects[i].id).then((data: any) => {
-        return { project: projects[i], data: data };
-      })
-    );
+async function getProjectsWithKeys(accountId: string) {
+  try {
+    const projects = await theAuthAPI.projects.getProjects(accountId);
+    const projectsKeys = projects.map(async (project) => {
+      const keys = await theAuthAPI.apiKeys.getKeys(project.id);
+      return { project, keys };
+    });
+    return await Promise.all(projectsKeys);
+  } catch (error) {
+    // handle error
   }
-  const allKeys = await Promise.all(allProjects).then((results: any) => {
-    return results;
-  });
+}
 ```
 
 #### Example: Creating an API Key
 
-```Javascript
-    .createKey({
-      projectId: "PROJECT_ID",
-      customMetaData: { metadata_val: 'value to store' },
-      customAccountId: "[any info you want]",
-      name: "[any info you want e.g. name of customer or the key]",
-    })
-    .then((createkey) => console.log("Key created > ", createkey))
-    .catch((error) => console.log("Couldn't make the key", error));
-``` 
+```javascript
+theAuthAPI.apiKeys
+  .createKey({
+    projectId: "PROJECT_ID",
+    customMetaData: { metadata_val: "value to store" },
+    customAccountId: "[any info you want]",
+    name: "[any info you want e.g. name of customer or the key]",
+  })
+  .then((key) => console.log("Key created > ", key))
+  .catch((error) => console.log("Couldn't make the key", error));
+```
+
 **Using async/await**
 
-```Javascript
+```javascript
 try {
-  const createkey = await theAuthAPI.apiKeys.createKey({
+  const key = await theAuthAPI.apiKeys.createKey({
     projectId: "PROJECT_ID",
-    customMetaData: { metadata_val: 'value to store' },
+    customMetaData: { metadata_val: "value to store" },
     customAccountId: "[any info you want]",
     name: "[any info you want e.g. name of customer or the key]",
   });
-   console.log("Key created > ", createkey);
-  } catch (error) {
+  console.log("Key created > ", key);
+} catch (error) {
   console.log("Couldn't make the key ", error);
 }
- 
 ```
 
-#### Typescript
+### Handling Errors
+
+[comment]: <> (All methods that return a promise throw 3 types of errors)
+
+##### ApiRequestError
+
+Thrown when there's a network or a connectivity issue, for example, if the client didn't establish any network connection with the host
+
+```
+ApiRequestError: getaddrinfo EAI_AGAIN api.theauthapi.com
+```
+
+##### ApiResponseError
+
+Thrown when the server responds with an HTTP status code not in the `2xx` range. `ApiRequestError` provides two properties to distinguish the type of the error
+
+- `statusCode` HTTP status code
+- `message` the message the server responded with in the body
+
+This is the most common thrown error, you should expect and handle it each time you use any of the library methods
+
+##### Example: Getting a key throws an ApiResponseError if the key is invalid
+
+If you try to GET an invalid key using `apiKeys.getKey("invalid-key")`, the server responds with a 404 error and an `ApiResponseError` is thrown
+
+```
+ApiResponseError: (404): Invalid client key
+```
+
+"404" is the `statusCode`, "Invalid client Key" is the `message`, you can access these properties using `error.statusCode` and `error.message` respectively
+
+##### Error
+
+Unknown error, just a normal javascript error
+
+#### Handling Errors the Right Way
+
+Since all the possible thrown errors are instances of classes, we can check the type of the thrown error and handle it accordingly
+
+```javascript
+try {
+  const key = await theAuthAPI.apiKeys.getKey("KEY");
+} catch (error) {
+  if (error instanceof ApiResponseError) {
+    // handle response error
+  }
+  if (error instanceof ApiRequestError) {
+    // handle network error
+  }
+  // unknown error
+  throw error;
+}
+```
+
+### Typescript
 
 This library is written in [Typescript](https://www.typescriptlang.org/), types are provided out of the box.
 
@@ -189,7 +270,7 @@ import { Project } from "theauthapi/types";
 
 const client = new TheAuthAPI("ACCESS_KEY");
 
-async function getProjects(accountId: string): Promise<string[]> {
+async function getProjectsIds(accountId: string): Promise<string[]> {
   const projects: Project[] = await client.projects.getProjects(accountId);
   return projects.map((project) => project.name);
 }
@@ -197,7 +278,7 @@ async function getProjects(accountId: string): Promise<string[]> {
 
 ### 📙 Further Reading
 
-* Create your account https://theauthapi.com
-* View our [Knowledge Base](https://thatapicompany.notion.site/The-Auth-API-Knowledge-Base-21660cee84e640729714fad43d9ce546) help centre
-* Articles on best Auth practice - https://theauthapi.com/articles
-* Meet the team behind The Auth API - [That API Company](https://thatapicompany.com/).
+- Create your account [https://theauthapi.com](https://theauthapi.com)
+- View our [Knowledge Base](https://thatapicompany.notion.site/The-Auth-API-Knowledge-Base-21660cee84e640729714fad43d9ce546) help centre
+- Articles on best Auth practice - [https://theauthapi.com/articles](https://theauthapi.com/articles)
+- Meet the team behind The Auth API - [That API Company](https://thatapicompany.com/)
