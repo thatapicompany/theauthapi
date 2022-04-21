@@ -19,7 +19,7 @@ export type RateLimitConfiguration = {
 
 export type ApiKeyInput = {
   name: string;
-  projectId: string;
+  projectId?: string;
   key?: string;
   customMetaData?: object;
   customAccountId?: string;
@@ -27,12 +27,12 @@ export type ApiKeyInput = {
   customUserId?: string;
 };
 
-export type ApiKeyFilter =  {
+export type ApiKeyFilter = {
   projectId?: string;
   customAccountId?: string;
   customUserId?: string;
   isActive?: boolean;
-}
+};
 
 export type UpdateApiKeyInput = {
   name: string;

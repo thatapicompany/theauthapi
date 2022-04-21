@@ -58,7 +58,7 @@ describe("ApiKeys", () => {
 
   it("should list api keys", async () => {
     const client = createClient();
-    const keys = await client.apiKeys.getKeys("project_1");
+    const keys = await client.apiKeys.getKeys();
     expect(keys).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -81,7 +81,7 @@ describe("ApiKeys", () => {
 
   it("should filter api keys using many filters", async () => {
     const client = createClient();
-    const keys = await client.apiKeys.getKeys("project_1", {
+    const keys = await client.apiKeys.getKeys({
       isActive: false,
       customAccountId: "null",
       customUserId: "USR123",
@@ -105,7 +105,7 @@ describe("ApiKeys", () => {
 
   it("should filter api keys using one filter", async () => {
     const client = createClient();
-    const keys = await client.apiKeys.getKeys("project_1", {
+    const keys = await client.apiKeys.getKeys({
       isActive: false,
     });
     expect(keys).toEqual(
@@ -168,7 +168,6 @@ describe("ApiKeys", () => {
       client.apiKeys.isValidKey(undefined as any)
     );
     await shouldThrowTypeError(() => client.apiKeys.getKey(undefined as any));
-    await shouldThrowTypeError(() => client.apiKeys.getKeys(undefined as any));
     await shouldThrowTypeError(() =>
       client.apiKeys.deleteKey(undefined as any)
     );
@@ -217,24 +216,21 @@ describe("ApiKeys", () => {
     const client = createClient();
     const apiKeys = client.apiKeys;
     expect(() =>
-      apiKeys["getKeysFilterEndpoint"](undefined as any, { isActive: false })
+      apiKeys["getKeysFilterEndpoint"]({ isActive: 1 as any })
     ).toThrow(TypeError);
     expect(() =>
-      apiKeys["getKeysFilterEndpoint"]("project-id", { isActive: 1 as any })
-    ).toThrow(TypeError);
-    expect(() =>
-      apiKeys["getKeysFilterEndpoint"]("project-id", {
+      apiKeys["getKeysFilterEndpoint"]({
         customUserId: 1 as any,
         isActive: false,
       })
     ).toThrow(TypeError);
     expect(() =>
-      apiKeys["getKeysFilterEndpoint"]("project-id", {
+      apiKeys["getKeysFilterEndpoint"]({
         customAccountId: 1 as any,
       })
     ).toThrow(TypeError);
     expect(() =>
-      apiKeys["getKeysFilterEndpoint"]("project-id", { projectId: 1 as any })
+      apiKeys["getKeysFilterEndpoint"]({ projectId: 1 as any })
     ).toThrow(TypeError);
   });
 });

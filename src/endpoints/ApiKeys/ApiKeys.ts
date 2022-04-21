@@ -36,8 +36,8 @@ class ApiKeys implements ApiKeysInterface {
     }
   }
 
-  async getKeys(projectId: string, filter?: ApiKeyFilter) {
-    const endpoint = this.getKeysFilterEndpoint(projectId, filter);
+  async getKeys(filter?: ApiKeyFilter) {
+    const endpoint = this.getKeysFilterEndpoint(filter);
     return await this.api.request<ApiKey[]>(HttpMethod.GET, endpoint);
   }
 
@@ -102,8 +102,7 @@ class ApiKeys implements ApiKeysInterface {
     validateString("updated", updatedKey.name);
   }
 
-  private validateFiltersInput(projectId: string, filter?: ApiKeyFilter) {
-    validateString("projectId", projectId);
+  private validateFiltersInput(filter?: ApiKeyFilter) {
     if (filter) {
       if (filter.isActive && typeof filter.isActive !== "boolean") {
         throw TypeError("isActive must be a boolean");
@@ -114,18 +113,13 @@ class ApiKeys implements ApiKeysInterface {
     }
   }
 
-  private getKeysFilterEndpoint(
-    projectId: string,
-    filter?: ApiKeyFilter
-  ): string {
-    this.validateFiltersInput(projectId, filter);
+  private getKeysFilterEndpoint(filter?: ApiKeyFilter): string {
+    this.validateFiltersInput(filter);
     let filters: string[] = [];
     if (filter) {
-      filters = Object.entries(filter).map(
-        ([key, value]) => `&${key}=${value}`
-      );
+      filters = Object.entries(filter).map(([key, value]) => `${key}=${value}`);
     }
-    return `${this.endpoint}?projectId=${projectId}${filters.join("")}`;
+    return `${this.endpoint}?${filters.join("&")}`;
   }
 }
 

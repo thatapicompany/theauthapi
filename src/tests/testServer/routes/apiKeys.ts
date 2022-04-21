@@ -66,9 +66,8 @@ export const apiKeyRoutes = router
       request.query;
 
     if (!projectId) {
-      return response.status(400).json({
-        message: "missing project-id",
-      });
+      // assume the access key is project leve access key and has a projectId linked to it
+      return response.json(keys.slice(1))
     }
     const filtered = keys.filter((key) => {
       if (isActive && key.isActive !== (isActive === "true" ? true : false)) {
