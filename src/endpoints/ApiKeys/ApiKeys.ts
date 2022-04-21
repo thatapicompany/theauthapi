@@ -75,9 +75,9 @@ class ApiKeys implements ApiKeysInterface {
     if (!apiKey) {
       throw new TypeError("apiKey must be an object");
     }
-    if (!apiKey.name || !apiKey.projectId) {
+    if (!apiKey.name) {
       throw TypeError(
-        "apiKey object must contain the properties [name, projectId]"
+        "apiKey object must contain the property name"
       );
     }
     // validate string properties only

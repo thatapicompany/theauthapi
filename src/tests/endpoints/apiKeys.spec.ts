@@ -140,6 +140,21 @@ describe("ApiKeys", () => {
     );
   });
 
+  it("should create a key without projectId", async () => {
+    const client = createClient();
+    const key = await client.apiKeys.createKey({
+      name: "my-new-api-key1",
+    });
+    expect(key).toEqual(
+      expect.objectContaining({
+        key: "live_1OvRrfHbPdiCUrFAD4VwxiqEgg8L5uiVDlIgE4075juY7TnimZQG1Ll770irHyfM",
+        name: "my-new-api-key1",
+        projectId: "project10",
+        env: "live",
+      })
+    );
+  });
+
   it("should update a key", async () => {
     const client = createClient();
     const key = await client.apiKeys.updateKey(
@@ -196,9 +211,6 @@ describe("ApiKeys", () => {
     );
     await shouldThrowTypeError(() =>
       client.apiKeys.createKey({ projectId: "1" } as any)
-    );
-    await shouldThrowTypeError(() =>
-      client.apiKeys.createKey({ name: "a" } as any)
     );
     await shouldThrowTypeError(() =>
       client.apiKeys.createKey({

@@ -91,8 +91,9 @@ export const apiKeyRoutes = router
     return response.json(filtered);
   })
   .post("/", (request, response) => {
+    // if projectId is missing we assume the access key is at the project level and projectId=project10
     const { name, projectId } = request.body;
-    if (!name || !projectId) {
+    if (!name) {
       response.json({
         message: "malformed apikey: missing name or projectId",
       });
@@ -100,7 +101,7 @@ export const apiKeyRoutes = router
     return response.json({
       key: "live_1OvRrfHbPdiCUrFAD4VwxiqEgg8L5uiVDlIgE4075juY7TnimZQG1Ll770irHyfM",
       name,
-      projectId,
+      projectId: projectId ?? 'project10',
       customAccountId: null,
       customUserId: null,
       env: "live",
