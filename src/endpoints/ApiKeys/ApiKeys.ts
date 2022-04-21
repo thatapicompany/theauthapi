@@ -119,7 +119,7 @@ class ApiKeys implements ApiKeysInterface {
     if (filter) {
       filters = Object.entries(filter).map(([key, value]) => `${key}=${value}`);
     }
-    return `${this.endpoint}?${filters.join("&")}`;
+    return `${this.endpoint}${filter ? "?" : ""}${filters.join("&")}`;
   }
 }
 

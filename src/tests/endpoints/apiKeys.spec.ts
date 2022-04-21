@@ -162,6 +162,26 @@ describe("ApiKeys", () => {
     expect(response).toBeTruthy();
   });
 
+  it("getKeysFilterEndpoint", async () => {
+    const client = createClient();
+    const apiKeys = client.apiKeys;
+    expect(apiKeys["getKeysFilterEndpoint"]()).toEqual("/api-keys/");
+    expect(apiKeys["getKeysFilterEndpoint"]({ projectId: "123" })).toEqual(
+      "/api-keys/?projectId=123"
+    );
+    expect(apiKeys["getKeysFilterEndpoint"]({ isActive: false })).toEqual(
+      "/api-keys/?isActive=false"
+    );
+    expect(
+      apiKeys["getKeysFilterEndpoint"]({
+        projectId: "123",
+        customUserId: "USR1",
+        customAccountId: "ACC1",
+        isActive: true,
+      })
+    ).toEqual("/api-keys/?projectId=123&customUserId=USR1&customAccountId=ACC1&isActive=true");
+  });
+
   it("should validate parameter types", async () => {
     const client = createClient();
     await shouldThrowTypeError(() =>
