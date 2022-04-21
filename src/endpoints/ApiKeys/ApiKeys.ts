@@ -1,16 +1,23 @@
 import { HttpMethod } from "../../services/ApiRequest/HttpMethod";
 import omit from "lodash.omit";
 import ApiRequest from "../../services/ApiRequest/ApiRequest";
-import { ApiKey, ApiKeyInput, UpdateApiKeyInput } from "../../types";
+import {
+  ApiKey,
+  ApiKeyFilter,
+  ApiKeyInput,
+  UpdateApiKeyInput,
+} from "../../types";
 import { validateString } from "../../util";
 import { ApiKeysInterface } from "./ApiKeysInterface";
 import ApiResponseError from "../../services/ApiRequest/ApiResponseError";
 
 class ApiKeys implements ApiKeysInterface {
   api: ApiRequest;
+  private readonly endpoint: string;
 
   constructor(apiService: ApiRequest) {
     this.api = apiService;
+    this.endpoint = "/api-keys/";
   }
 
   async isValidKey(apikey: string): Promise<boolean> {
@@ -29,12 +36,9 @@ class ApiKeys implements ApiKeysInterface {
     }
   }
 
-  async getKeys(projectId: string) {
-    validateString("projectId", projectId);
-    return await this.api.request<ApiKey[]>(
-      HttpMethod.GET,
-      `/api-keys/?projectId=${projectId}`
-    );
+  async getKeys(filter?: ApiKeyFilter) {
+    const endpoint = this.getKeysFilterEndpoint(filter);
+    return await this.api.request<ApiKey[]>(HttpMethod.GET, endpoint);
   }
 
   async getKey(apikey: string) {
@@ -50,12 +54,12 @@ class ApiKeys implements ApiKeysInterface {
     return await this.api.request<ApiKey>(HttpMethod.POST, "/api-keys", apiKey);
   }
 
-  async updateKey(apiKey: string, updateTo: UpdateApiKeyInput) {
-    this.validateUpdateKeyInput(apiKey, updateTo);
+  async updateKey(apiKey: string, updatedKey: UpdateApiKeyInput) {
+    this.validateUpdateKeyInput(apiKey, updatedKey);
     return await this.api.request<ApiKey>(
       HttpMethod.PATCH,
       `/api-keys/${apiKey}`,
-      updateTo
+      updatedKey
     );
   }
 
@@ -71,9 +75,9 @@ class ApiKeys implements ApiKeysInterface {
     if (!apiKey) {
       throw new TypeError("apiKey must be an object");
     }
-    if (!apiKey.name || !apiKey.projectId) {
+    if (!apiKey.name) {
       throw TypeError(
-        "apiKey object must contain the properties [name, projectId]"
+        "apiKey object must contain the property name"
       );
     }
     // validate string properties only
@@ -84,7 +88,10 @@ class ApiKeys implements ApiKeysInterface {
     }
   }
 
-  private validateUpdateKeyInput(apiKey: string, updatedKey: UpdateApiKeyInput) {
+  private validateUpdateKeyInput(
+    apiKey: string,
+    updatedKey: UpdateApiKeyInput
+  ) {
     if (!updatedKey) {
       throw new TypeError("updatedKey must be an object");
     }
@@ -95,6 +102,26 @@ class ApiKeys implements ApiKeysInterface {
     }
     validateString("apiKey", apiKey);
     validateString("name", updatedKey.name);
+  }
+
+  private validateFiltersInput(filter?: ApiKeyFilter) {
+    if (filter) {
+      if (filter.isActive && typeof filter.isActive !== "boolean") {
+        throw TypeError("isActive must be a boolean");
+      }
+      Object.entries(omit(filter, "isActive")).forEach(([key, value]) => {
+        validateString(key, value);
+      });
+    }
+  }
+
+  private getKeysFilterEndpoint(filter?: ApiKeyFilter): string {
+    this.validateFiltersInput(filter);
+    let filters: string[] = [];
+    if (filter) {
+      filters = Object.entries(filter).map(([key, value]) => `${key}=${value}`);
+    }
+    return `${this.endpoint}${filter ? "?" : ""}${filters.join("&")}`;
   }
 }
 
