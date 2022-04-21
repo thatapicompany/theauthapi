@@ -6,11 +6,11 @@
   - [Installation](#installation)
   - [Configuration](#configuration)
   - [Usage](#usage)
-    - [Example: Validating an api-key](#example-validating-an-api-key)
-    - [Example: Listing API-keys](#example-listing-api-keys)
+    - [Example: Validating an API-Key](#example-validating-an-api-key)
+    - [Example: Listing API-Keys](#example-listing-api-keys)
     - [Example: Listing the projects of an account](#example-listing-the-projects-of-an-account)
-    - [Example: Listing projects and associated API Keys](#example-listing-projects-and-associated-api-keys)
-    - [Example: Creating an API Key](#example-creating-an-api-key)
+    - [Example: Listing projects and associated API-Keys](#example-listing-projects-and-associated-api-keys)
+    - [Example: Creating an API-Key](#example-creating-an-api-key)
     - [Handling Errors](#handling-errors)
     - [Typescript](#typescript)
     - [📙 Further Reading](#-further-reading)
@@ -104,7 +104,7 @@ All methods return a promise containing the returned JSON as a javascript object
 | DELETE      | delete\*    | `client.apiKeys.deleteKey("MY_KEY")`                                      |
 | PATCH       | update\*    | `client.apiKeys.updateKey("MY_KEY", { name: "UPDATED_KEY_NAME" })`        |
 
-#### Example: Validating an api-key
+#### Example: Validating an API-Key
 
 You can easily validate an API key using `apiKeys.isValidKey` which returns `true` if the key is valid, `false` otherwise.
 `isValidKey` throws an `ApiRequestError` if there's a network issue, it's advised to wrap it in a `try/catch` to handle the potential error
@@ -201,7 +201,7 @@ try {
 }
 ```
 
-#### Example: Listing projects and associated API Keys
+#### Example: Listing projects and associated API-Keys
 
 ```javascript
 async function getProjectsWithKeys(accountId: string) {
@@ -218,7 +218,7 @@ async function getProjectsWithKeys(accountId: string) {
 }
 ```
 
-#### Example: Creating an API Key
+#### Example: Creating an API-Key
 
 ```javascript
 theAuthAPI.apiKeys
