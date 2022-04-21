@@ -7,6 +7,7 @@
   - [Configuration](#configuration)
   - [Usage](#usage)
     - [Example: Validating an api-key](#example-validating-an-api-key)
+    - [Example: Listing API-keys](#example-listing-api-keys)
     - [Example: Listing the projects of an account](#example-listing-the-projects-of-an-account)
     - [Example: Listing projects and associated API Keys](#example-listing-projects-and-associated-api-keys)
     - [Example: Creating an API Key](#example-creating-an-api-key)
@@ -99,7 +100,7 @@ All methods return a promise containing the returned JSON as a javascript object
 | HTTP Method | method name | example                                                                   |
 | ----------- | ----------- | ------------------------------------------------------------------------- |
 | POST        | create\*    | `client.apiKeys.createKey({ name: "KEY_NAME", projectId: "PROJECT_ID" })` |
-| GET         | get\*       | `client.apiKeys.getKeys("PROJECT_ID")`                                    |
+| GET         | get\*       | `client.apiKeys.getKeys()`                                                |
 | DELETE      | delete\*    | `client.apiKeys.deleteKey("MY_KEY")`                                      |
 | PATCH       | update\*    | `client.apiKeys.updateKey("MY_KEY", { name: "UPDATED_KEY_NAME" })`        |
 
@@ -135,6 +136,49 @@ try {
   }
 } catch (error) {
   // handle network error
+}
+```
+
+#### Example: Listing API-keys
+
+```javascript
+theAuthAPI.apiKeys
+  .getKeys()
+  .then((keys) => console.log(keys))
+  .catch((error) => console.log(error));
+```
+
+**Using async/await**
+
+```javascript
+try {
+  const keys = await theAuthAPI.apiKeys.getKeys();
+} catch (error) {
+  console.log(error);
+}
+```
+
+**Filtering API Keys**: You can filter the listed API keys by passing an object of type filter as an argument to `getKeys` 
+
+```typescript
+type ApiKeyFilter = {
+  projectId?: string;
+  customAccountId?: string;
+  customUserId?: string;
+  isActive?: boolean;
+};
+```
+
+**Example**: filtering api-keys with a specific `projectId` where the keys are not active
+
+```javascript
+try {
+  const keys = await theAuthAPI.apiKeys.getKeys({
+    projectId: "PROJECT_ID",
+    isActive: false,
+  });
+} catch (error) {
+  console.log(error);
 }
 ```
 
