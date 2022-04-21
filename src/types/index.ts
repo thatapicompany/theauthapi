@@ -3,9 +3,11 @@ export type ApiKey = {
   name: string;
   customMetaData: string;
   customAccountId: string;
+  customUserId: string;
   env: string;
   createdAt: Date;
   updatedAt: Date;
+  isActive: boolean;
 };
 
 export type RateLimitConfiguration = {
@@ -24,6 +26,13 @@ export type ApiKeyInput = {
   rateLimitConfigs?: RateLimitConfiguration;
   customUserId?: string;
 };
+
+export type ApiKeyFilter =  {
+  projectId?: string;
+  customAccountId?: string;
+  customUserId?: string;
+  isActive?: boolean;
+}
 
 export type UpdateApiKeyInput = {
   name: string;

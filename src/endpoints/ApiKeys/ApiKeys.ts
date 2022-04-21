@@ -1,16 +1,23 @@
 import { HttpMethod } from "../../services/ApiRequest/HttpMethod";
 import omit from "lodash.omit";
 import ApiRequest from "../../services/ApiRequest/ApiRequest";
-import { ApiKey, ApiKeyInput, UpdateApiKeyInput } from "../../types";
+import {
+  ApiKey,
+  ApiKeyFilter,
+  ApiKeyInput,
+  UpdateApiKeyInput,
+} from "../../types";
 import { validateString } from "../../util";
 import { ApiKeysInterface } from "./ApiKeysInterface";
 import ApiResponseError from "../../services/ApiRequest/ApiResponseError";
 
 class ApiKeys implements ApiKeysInterface {
   api: ApiRequest;
+  private readonly endpoint: string;
 
   constructor(apiService: ApiRequest) {
     this.api = apiService;
+    this.endpoint = "/api-keys/";
   }
 
   async isValidKey(apikey: string): Promise<boolean> {
@@ -29,12 +36,9 @@ class ApiKeys implements ApiKeysInterface {
     }
   }
 
-  async getKeys(projectId: string) {
-    validateString("projectId", projectId);
-    return await this.api.request<ApiKey[]>(
-      HttpMethod.GET,
-      `/api-keys/?projectId=${projectId}`
-    );
+  async getKeys(projectId: string, filter?: ApiKeyFilter) {
+    const endpoint = this.getKeysFilterEndpoint(projectId, filter);
+    return await this.api.request<ApiKey[]>(HttpMethod.GET, endpoint);
   }
 
   async getKey(apikey: string) {
@@ -84,17 +88,44 @@ class ApiKeys implements ApiKeysInterface {
     }
   }
 
-  private validateUpdateKeyInput(apiKey: string, updatedKey: UpdateApiKeyInput) {
+  private validateUpdateKeyInput(
+    apiKey: string,
+    updatedKey: UpdateApiKeyInput
+  ) {
     if (!updatedKey) {
       throw new TypeError("apiKey must be an object");
     }
     if (!updatedKey.name) {
-      throw TypeError(
-        "apiKey object must contain the property [name]"
-      );
+      throw TypeError("apiKey object must contain the property [name]");
     }
     validateString("name", apiKey);
     validateString("updated", updatedKey.name);
+  }
+
+  private validateFiltersInput(projectId: string, filter?: ApiKeyFilter) {
+    validateString("projectId", projectId);
+    if (filter) {
+      if (filter.isActive && typeof filter.isActive !== "boolean") {
+        throw TypeError("isActive must be a boolean");
+      }
+      Object.entries(omit(filter, "isActive")).forEach(([key, value]) => {
+        validateString(key, value);
+      });
+    }
+  }
+
+  private getKeysFilterEndpoint(
+    projectId: string,
+    filter?: ApiKeyFilter
+  ): string {
+    this.validateFiltersInput(projectId, filter);
+    let filters: string[] = [];
+    if (filter) {
+      filters = Object.entries(filter).map(
+        ([key, value]) => `&${key}=${value}`
+      );
+    }
+    return `${this.endpoint}?projectId=${projectId}${filters.join("")}`;
   }
 }
 
