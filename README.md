@@ -182,6 +182,10 @@ try {
 }
 ```
 
+**NOTE** that if your access key is at account level, you need to specify `projectId` when listing the API keys: 
+`getKeys({ projectId: "PROJECT_ID" })`, otherwise if your access key is created at project level, you don't have to specify `projectId`, 
+the access key's `projectId` will be used to get the API-keys (i.e. you'll see only the keys of the project your access key is created against)
+
 #### Example: Listing the projects of an account
 
 ```javascript
