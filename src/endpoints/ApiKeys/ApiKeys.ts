@@ -54,12 +54,12 @@ class ApiKeys implements ApiKeysInterface {
     return await this.api.request<ApiKey>(HttpMethod.POST, "/api-keys", apiKey);
   }
 
-  async updateKey(apiKey: string, updateTo: UpdateApiKeyInput) {
-    this.validateUpdateKeyInput(apiKey, updateTo);
+  async updateKey(apiKey: string, updatedKey: UpdateApiKeyInput) {
+    this.validateUpdateKeyInput(apiKey, updatedKey);
     return await this.api.request<ApiKey>(
       HttpMethod.PATCH,
       `/api-keys/${apiKey}`,
-      updateTo
+      updatedKey
     );
   }
 
