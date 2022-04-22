@@ -4,6 +4,7 @@ import { Server } from "http";
 import { shouldThrowError, shouldThrowTypeError } from "../util";
 import ApiResponseError from "../../services/ApiRequest/ApiResponseError";
 import ApiKeys from "../../endpoints/ApiKeys/ApiKeys";
+import { Environment } from "../../types";
 
 const port = 4063;
 
@@ -130,12 +131,20 @@ describe("ApiKeys", () => {
     const key = await client.apiKeys.createKey({
       name: "my-new-api-key1",
       projectId: "b52262b5-eaa6-4edd-825c-ebcdf76a10e5",
+      customMetaData: {
+        userType: "BASIC"
+      }
     });
     expect(key).toEqual(
       expect.objectContaining({
         key: "live_1OvRrfHbPdiCUrFAD4VwxiqEgg8L5uiVDlIgE4075juY7TnimZQG1Ll770irHyfM",
         name: "my-new-api-key1",
+        projectId: "b52262b5-eaa6-4edd-825c-ebcdf76a10e5",
         env: "live",
+        customMetaData: {
+          userType: "BASIC"
+        },
+        isActive: true,
       })
     );
   });

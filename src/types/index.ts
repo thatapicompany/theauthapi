@@ -1,10 +1,10 @@
 export type ApiKey = {
   key: string;
   name: string;
-  customMetaData: string;
+  customMetaData: object;
   customAccountId: string;
   customUserId: string;
-  env: string;
+  env: Environment;
   createdAt: Date;
   updatedAt: Date;
   isActive: boolean;
@@ -12,7 +12,7 @@ export type ApiKey = {
 
 export type RateLimitConfiguration = {
   rateLimitedEntity?: string;
-  ratelimitedEnitityId?: any;
+  ratelimitedEnitityId?: string;
   rateLimit: number;
   rateLimitTtl: number;
 };
@@ -23,8 +23,8 @@ export type ApiKeyInput = {
   key?: string;
   customMetaData?: object;
   customAccountId?: string;
-  rateLimitConfigs?: RateLimitConfiguration;
   customUserId?: string;
+  rateLimitConfigs?: RateLimitConfiguration;
 };
 
 export type ApiKeyFilter = {
@@ -60,7 +60,7 @@ export type Project = AuthBaseEntity & {
   id: string;
   name: string;
   accountId: string;
-  env: string;
+  env: Environment;
 };
 
 export enum Environment {
