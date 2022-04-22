@@ -92,7 +92,7 @@ export const apiKeyRoutes = router
   })
   .post("/", (request, response) => {
     // if projectId is missing we assume the access key is at the project level and projectId=project10
-    const { name, projectId } = request.body;
+    const { name, projectId, customMetaData } = request.body;
     if (!name) {
       response.json({
         message: "malformed apikey: missing name or projectId",
@@ -108,6 +108,7 @@ export const apiKeyRoutes = router
       createdAt: "2022-04-02T21:10:39.648Z",
       updatedAt: "2022-04-02T21:10:39.648Z",
       isActive: true,
+      customMetaData,
     });
   })
   .patch("/:key", (request, response) => {
