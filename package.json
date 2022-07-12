@@ -7,6 +7,7 @@
   "files": [
     "dist"
   ],
+  "keywords": ["theauthapi", "authapi"],
   "scripts": {
     "test": "jest --runInBand",
     "test:coverage": "jest --coverage --runInBand",
