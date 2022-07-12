@@ -11,8 +11,6 @@
   "scripts": {
     "test": "jest --runInBand",
     "test:coverage": "jest --coverage --runInBand",
-    "np": "np --no-publish",
-    "release": "yarn run np",
     "build": "tsc",
     "prepublish": "npm run build"
   },
