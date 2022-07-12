@@ -36,6 +36,14 @@ class ApiKeys implements ApiKeysInterface {
     }
   }
 
+  async authenticateKey(apikey: string): Promise<ApiKey> {
+    validateString("apikey", apikey);
+    return await this.api.request<ApiKey>(
+      HttpMethod.GET,
+      `/api-keys/auth/${apikey}`
+    );
+  }
+
   async getKeys(filter?: ApiKeyFilter) {
     const endpoint = this.getKeysFilterEndpoint(filter);
     return await this.api.request<ApiKey[]>(HttpMethod.GET, endpoint);
