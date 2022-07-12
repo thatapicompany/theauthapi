@@ -39,6 +39,28 @@ const keys = [
 ];
 
 export const apiKeyRoutes = router
+  .get("/auth/:key", (request, response) => {
+    const key = request.params.key;
+    if (!key) {
+      return response.status(400).json({
+        message: "missing api-key",
+      });
+    }
+    if (key === "invalid-key") {
+      return response.status(404).json({
+        statusCode: 404,
+        message: "Invalid client key",
+        error: "Not Found",
+      });
+    }
+    // generate 403: user trying to access a key which they don't have access to
+    if (key === "$") {
+      return response.status(403).json({
+        message: "Invalid roles for this account",
+      });
+    }
+    return response.json(keys[0]);
+  })
   .get("/:key", (request, response) => {
     const key = request.params.key;
     if (!key) {
@@ -67,10 +89,10 @@ export const apiKeyRoutes = router
 
     if (!projectId) {
       // assume the access key is project leve access key and has a projectId linked to it
-      return response.json(keys.slice(1))
+      return response.json(keys.slice(1));
     }
     const filtered = keys.filter((key) => {
-      if (isActive && key.isActive !== (isActive === "true" ? true : false)) {
+      if (isActive && key.isActive !== (isActive === "true")) {
         return false;
       }
       if (
@@ -101,7 +123,7 @@ export const apiKeyRoutes = router
     return response.json({
       key: "live_1OvRrfHbPdiCUrFAD4VwxiqEgg8L5uiVDlIgE4075juY7TnimZQG1Ll770irHyfM",
       name,
-      projectId: projectId ?? 'project10',
+      projectId: projectId ?? "project10",
       customAccountId: null,
       customUserId: null,
       env: "live",

@@ -4,7 +4,6 @@ import { Server } from "http";
 import { shouldThrowError, shouldThrowTypeError } from "../util";
 import ApiResponseError from "../../services/ApiRequest/ApiResponseError";
 import ApiKeys from "../../endpoints/ApiKeys/ApiKeys";
-import { Environment } from "../../types";
 
 const port = 4063;
 
@@ -45,6 +44,21 @@ describe("ApiKeys", () => {
   it("should get an apikey", async () => {
     const client = createClient();
     const data = await client.apiKeys.getKey(
+      "live_access_zBA6cvuEbJEUhhDIWwuErXHLnwvWqtcqe2ajfV3RVVZvD6lc6xDUaSsSZL1fk53a"
+    );
+    expect(data.name).toEqual("My customers first Api Key");
+    expect(data.key).toEqual(
+      "KGTSsxbDndjRRcpJGuQQp2or9UmQkqRrVQpCWgQruIXnvnNatmfdmOTcsgYnNwnH"
+    );
+    expect(data.createdAt).toEqual(new Date("2022-03-16T10:34:23.353Z"));
+    expect(data.updatedAt).toEqual(new Date("2022-03-16T10:34:23.353Z"));
+    expect(data.env).toEqual("live");
+    expect(data.customAccountId).toEqual("acc-id");
+  });
+
+  it("should authenticate an apikey", async () => {
+    const client = createClient();
+    const data = await client.apiKeys.authenticateKey(
       "live_access_zBA6cvuEbJEUhhDIWwuErXHLnwvWqtcqe2ajfV3RVVZvD6lc6xDUaSsSZL1fk53a"
     );
     expect(data.name).toEqual("My customers first Api Key");
@@ -132,8 +146,8 @@ describe("ApiKeys", () => {
       name: "my-new-api-key1",
       projectId: "b52262b5-eaa6-4edd-825c-ebcdf76a10e5",
       customMetaData: {
-        userType: "BASIC"
-      }
+        userType: "BASIC",
+      },
     });
     expect(key).toEqual(
       expect.objectContaining({
@@ -142,7 +156,7 @@ describe("ApiKeys", () => {
         projectId: "b52262b5-eaa6-4edd-825c-ebcdf76a10e5",
         env: "live",
         customMetaData: {
-          userType: "BASIC"
+          userType: "BASIC",
         },
         isActive: true,
       })
@@ -203,7 +217,9 @@ describe("ApiKeys", () => {
         customAccountId: "ACC1",
         isActive: true,
       })
-    ).toEqual("/api-keys/?projectId=123&customUserId=USR1&customAccountId=ACC1&isActive=true");
+    ).toEqual(
+      "/api-keys/?projectId=123&customUserId=USR1&customAccountId=ACC1&isActive=true"
+    );
   });
 
   it("should validate parameter types", async () => {
