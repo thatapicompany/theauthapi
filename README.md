@@ -31,7 +31,7 @@ yarn add theauthapi
 
 ## Configuration
 
-You'll need to configure the library with your `access key` and `account id`, you can grab these from [TheAuthAPI](https://app.theauthapi.com/dashboard) dashboard.
+You'll need to configure the library with your `access key` and `account id`, you can grab these from [TheAuthAPI](https://app.theauthapi.com) dashboard.
 
 For further instructions on creating an account, check out our [how to guides](https://thatapicompany.notion.site/The-Auth-API-Knowledge-Base-21660cee84e640729714fad43d9ce546).
 
@@ -138,6 +138,8 @@ try {
   // handle network error
 }
 ```
+
+**Note:** If you want to consume the API key and get the API key entity in return, you can use `apiKeys.authenticateKey` which returns an ApiKey.
 
 #### Example: Listing API-keys
 
@@ -328,5 +330,6 @@ async function getProjectsIds(accountId: string): Promise<string[]> {
 
 - Create your account [https://theauthapi.com](https://theauthapi.com)
 - View our [Knowledge Base](https://thatapicompany.notion.site/The-Auth-API-Knowledge-Base-21660cee84e640729714fad43d9ce546) help centre
+- Read our [API docs](https://docs.theauthapi.com)
 - Articles on best Auth practice - [https://theauthapi.com/articles](https://theauthapi.com/articles)
 - Meet the team behind The Auth API - [That API Company](https://thatapicompany.com/)
