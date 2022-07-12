@@ -25,7 +25,7 @@ class ApiKeys implements ApiKeysInterface {
     try {
       const key = await this.api.request<ApiKey>(
         HttpMethod.GET,
-        `/api-keys/${apikey}`
+        `/api-keys/auth/${apikey}`
       );
       return key.key !== undefined;
     } catch (error) {
@@ -76,9 +76,7 @@ class ApiKeys implements ApiKeysInterface {
       throw new TypeError("apiKey must be an object");
     }
     if (!apiKey.name) {
-      throw TypeError(
-        "apiKey object must contain the property name"
-      );
+      throw TypeError("apiKey object must contain the property name");
     }
     // validate string properties only
     for (const [key, value] of Object.entries(
@@ -96,9 +94,7 @@ class ApiKeys implements ApiKeysInterface {
       throw new TypeError("updatedKey must be an object");
     }
     if (!updatedKey.name) {
-      throw TypeError(
-        "updatedKey object must contain the property [name]"
-      );
+      throw TypeError("updatedKey object must contain the property [name]");
     }
     validateString("apiKey", apiKey);
     validateString("name", updatedKey.name);
