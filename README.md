@@ -33,7 +33,7 @@ yarn add theauthapi
 
 You'll need to configure the library with your `access key` and `account id`, you can grab these from [TheAuthAPI](https://app.theauthapi.com) dashboard.
 
-For further instructions on creating an account, check out our [how to guides](https://thatapicompany.notion.site/The-Auth-API-Knowledge-Base-21660cee84e640729714fad43d9ce546).
+For further instructions on creating an account, check out our [how to guides](https://support.theauthapi.com/).
 
 ### Imports
 
