@@ -21,12 +21,8 @@ class ApiKeys implements ApiKeysInterface {
   }
 
   async isValidKey(apikey: string): Promise<boolean> {
-    validateString("apikey", apikey);
     try {
-      const key = await this.api.request<ApiKey>(
-        HttpMethod.POST,
-        `/api-keys/auth/${apikey}`
-      );
+      const key = await this.authenticateKey(apikey);
       return key.key !== undefined;
     } catch (error) {
       if (error instanceof ApiResponseError && error.statusCode === 404) {
