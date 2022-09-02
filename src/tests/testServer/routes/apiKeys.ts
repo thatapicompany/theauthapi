@@ -39,7 +39,7 @@ const keys = [
 ];
 
 export const apiKeyRoutes = router
-  .get("/auth/:key", (request, response) => {
+  .post("/auth/:key", (request, response) => {
     const key = request.params.key;
     if (!key) {
       return response.status(400).json({

@@ -24,7 +24,7 @@ class ApiKeys implements ApiKeysInterface {
     validateString("apikey", apikey);
     try {
       const key = await this.api.request<ApiKey>(
-        HttpMethod.GET,
+        HttpMethod.POST,
         `/api-keys/auth/${apikey}`
       );
       return key.key !== undefined;
@@ -39,7 +39,7 @@ class ApiKeys implements ApiKeysInterface {
   async authenticateKey(apikey: string): Promise<ApiKey> {
     validateString("apikey", apikey);
     return await this.api.request<ApiKey>(
-      HttpMethod.GET,
+      HttpMethod.POST,
       `/api-keys/auth/${apikey}`
     );
   }
