@@ -8,11 +8,11 @@ export type ApiKey = {
   createdAt: Date;
   updatedAt: Date;
   isActive: boolean;
+  rateLimitConfigs: RateLimitConfiguration;
+  expiry: Date;
 };
 
 export type RateLimitConfiguration = {
-  rateLimitedEntity?: string;
-  ratelimitedEnitityId?: string;
   rateLimit: number;
   rateLimitTtl: number;
 };
