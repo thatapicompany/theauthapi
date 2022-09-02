@@ -75,6 +75,14 @@ class ApiKeys implements ApiKeysInterface {
     );
   }
 
+  async reactivateKey(apiKey: string): Promise<ApiKey> {
+    validateString("apiKey", apiKey);
+    return await this.api.request<ApiKey>(
+      HttpMethod.PATCH,
+      `/api-keys/${apiKey}/reactivate`
+    );
+  }
+
   private validateCreateKeyInput(apiKey: ApiKeyInput) {
     if (!apiKey) {
       throw new TypeError("apiKey must be an object");

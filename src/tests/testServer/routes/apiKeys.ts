@@ -148,6 +148,15 @@ export const apiKeyRoutes = router
     }
     return response.json({ ...keys[1], name });
   })
+  .patch("/:key/reactivate", (request, response) => {
+    const { key } = request.params;
+    if (!key) {
+      return response.status(400).json({
+        message: "missing api-key",
+      });
+    }
+    return response.json(keys[1]);
+  })
   .delete("/:key", (request, response) => {
     const { key } = request.params;
     if (!key) {

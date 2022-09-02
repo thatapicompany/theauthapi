@@ -200,6 +200,17 @@ describe("ApiKeys", () => {
     expect(response).toBeTruthy();
   });
 
+  it("should reactivate a key", async () => {
+    const client = createClient();
+    const key = await client.apiKeys.reactivateKey(
+      "live_TVHW0PVtktylIVObMd8J0sBHb7Ym3ZraObpeT3qxu7YRHig2KxrEIwggn50sBpSZ"
+    );
+    expect(key.name).toEqual("my-first-api-key");
+    expect(key.key).toEqual(
+      "live_h3uDZInxQexGLkwoxMDmuqz6PsyXGjkbrmSTpEwFb8l97mdAlQKtt14kt9Rv91PL"
+    );
+  });
+
   it("getKeysFilterEndpoint", async () => {
     const client = createClient();
     const apiKeys = client.apiKeys;
