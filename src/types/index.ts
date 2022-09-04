@@ -1,7 +1,7 @@
 export type ApiKey = {
   key: string;
   name: string;
-  customMetaData: object;
+  customMetaData: AnyJson;
   customAccountId: string;
   customUserId: string;
   env: Environment;
@@ -21,11 +21,11 @@ export type ApiKeyInput = {
   name: string;
   projectId?: string;
   key?: string;
-  customMetaData?: object;
+  customMetaData?: AnyJson;
   customAccountId?: string;
   customUserId?: string;
   rateLimitConfigs?: RateLimitConfiguration;
-  expiry?: Date,
+  expiry?: Date;
 };
 
 export type ApiKeyFilter = {
@@ -37,7 +37,7 @@ export type ApiKeyFilter = {
 
 export type UpdateApiKeyInput = {
   name: string;
-  customMetaData?: object;
+  customMetaData?: AnyJson;
   customAccountId?: string;
 };
 
@@ -83,3 +83,9 @@ export type Account = AuthBaseEntity & {
   id: string;
   name: string;
 };
+
+type AnyJson = boolean | number | string | null | JsonArray | JsonMap;
+type JsonMap = {
+  [key: string]: AnyJson;
+};
+type JsonArray = Array<AnyJson>;
