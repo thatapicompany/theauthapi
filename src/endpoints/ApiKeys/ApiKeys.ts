@@ -90,9 +90,20 @@ class ApiKeys implements ApiKeysInterface {
     if (!apiKey.name) {
       throw TypeError("apiKey object must contain the property name");
     }
+    if (apiKey.expiry && !(apiKey.expiry instanceof Date)) {
+      throw TypeError("expiry must be a Date");
+    }
+    if (apiKey.rateLimitConfigs) {
+      if (
+        typeof apiKey.rateLimitConfigs.rateLimit !== "number" ||
+        typeof apiKey.rateLimitConfigs.rateLimitTtl !== "number"
+      ) {
+        throw new TypeError("rateLimitConfigs properties should be a number");
+      }
+    }
     // validate string properties only
     for (const [key, value] of Object.entries(
-      omit(apiKey, ["customMetaData", "rateLimitConfigs"])
+      omit(apiKey, ["customMetaData", "rateLimitConfigs", "expiry"])
     )) {
       validateString(key, value);
     }

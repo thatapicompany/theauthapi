@@ -270,6 +270,35 @@ describe("ApiKeys", () => {
       } as any)
     );
     await shouldThrowTypeError(() =>
+      client.apiKeys.createKey({
+        name: "a",
+        projectId: "1",
+        customUserId: undefined,
+        rateLimitConfigs: {
+          rateLimit: "1",
+          rateLimitTtl: 123,
+        },
+      } as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.apiKeys.createKey({
+        name: "a",
+        projectId: "1",
+        customUserId: undefined,
+        rateLimitConfigs: {
+          rateLimit: 123,
+          rateLimitTtl: "1",
+        },
+      } as any)
+    );
+    await shouldThrowTypeError(() =>
+      client.apiKeys.createKey({
+        name: "a",
+        projectId: "1",
+        expiry: "not a date",
+      } as any)
+    );
+    await shouldThrowTypeError(() =>
       client.apiKeys.updateKey(undefined as any, {} as any)
     );
     await shouldThrowTypeError(() =>
