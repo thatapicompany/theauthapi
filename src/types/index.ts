@@ -25,6 +25,7 @@ export type ApiKeyInput = {
   customAccountId?: string;
   customUserId?: string;
   rateLimitConfigs?: RateLimitConfiguration;
+  expiry?: Date,
 };
 
 export type ApiKeyFilter = {
