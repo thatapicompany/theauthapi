@@ -37,8 +37,12 @@ export type ApiKeyFilter = {
 
 export type UpdateApiKeyInput = {
   name: string;
+  key?: string;
   customMetaData?: AnyJson;
   customAccountId?: string;
+  customUserId?: string;
+  expiry?: Date | null;
+  rateLimitConfigs?: RateLimitConfiguration | null;
 };
 
 export enum AuthedEntityType {
