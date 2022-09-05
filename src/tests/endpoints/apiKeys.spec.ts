@@ -163,6 +163,27 @@ describe("ApiKeys", () => {
     );
   });
 
+  it("should filter api keys using name", async () => {
+    const client = createClient();
+    const keys = await client.apiKeys.getKeys({
+      projectId: "b52262b5-eaa6-4edd-825c-ebcdf76a10e5",
+      name: "my-first-api-key",
+    });
+    expect(keys).toEqual([
+      {
+        key: "live_h3uDZInxQexGLkwoxMDmuqz6PsyXGjkbrmSTpEwFb8l97mdAlQKtt14kt9Rv91PL",
+        name: "my-first-api-key",
+        customMetaData: {},
+        customAccountId: null,
+        customUserId: "USR123",
+        env: "live",
+        createdAt: new Date("2022-04-03T01:59:32.051Z"),
+        updatedAt: new Date("2022-04-03T01:59:32.051Z"),
+        isActive: true,
+      },
+    ]);
+  });
+
   it("should filter api keys using customAccountId", async () => {
     const client = createClient();
     const keys = await client.apiKeys.getKeys({

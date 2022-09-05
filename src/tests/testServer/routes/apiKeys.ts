@@ -84,7 +84,7 @@ export const apiKeyRoutes = router
     return response.json(keys[0]);
   })
   .get("/", (request, response) => {
-    const { projectId, isActive, customAccountId, customUserId } =
+    const { projectId, isActive, customAccountId, customUserId, name } =
       request.query;
 
     if (!projectId) {
@@ -109,6 +109,9 @@ export const apiKeyRoutes = router
         key.customAccountId !==
           (customAccountId === "null" ? null : customAccountId)
       ) {
+        return false;
+      }
+      if (name && key.name.toLowerCase() !== (name as string).toLowerCase()) {
         return false;
       }
       return true;

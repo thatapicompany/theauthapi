@@ -30,6 +30,7 @@ export type ApiKeyInput = {
 
 export type ApiKeyFilter = {
   projectId?: string;
+  name?: string;
   customAccountId?: string | null;
   customUserId?: string | null;
   isActive?: boolean;
