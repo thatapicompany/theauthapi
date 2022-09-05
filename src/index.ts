@@ -12,56 +12,37 @@ const noop = () => {};
 
 type Options = {
   host?: string;
-  timeout?: string | number;
-  cacheTTL?: number;
-  enable?: boolean;
   retryCount?: number;
 };
 
 class TheAuthAPI {
-  queue: [];
   accessKey: string;
   host: string;
   timeout: number | string | undefined;
-  cacheTTL: number;
   api: ApiRequest;
   apiKeys: ApiKeys;
   projects: Projects;
   accounts: Accounts;
 
   /**
-   * Initialize a new `Analytics` with your Segment project's `writeKey` and an
-   * optional dictionary of `options`.
-   *
    * @param {String} accessKey
    * @param {Object} [options] (optional)
-   *   @property {Number} flushAt (default: 20)
-   *   @property {Number} flushInterval (default: 10000)
    *   @property {String} host (default: 'https://api.segment.io')
-   *   @property {Boolean} enable (default: true)
+   *   @property {number} retryCount (default: 3)
    */
 
   constructor(accessKey: string, options?: Options) {
     assert(accessKey, "You must pass your project's write key.");
-    this.queue = [];
     this.accessKey = accessKey;
     this.host = removeSlash(options?.host || "https://api.theauthapi.com");
-    this.timeout = options?.timeout;
-    this.cacheTTL = options?.cacheTTL ?? 60;
     this.api = new ApiRequest({
       accessKey: this.accessKey,
       host: this.host,
+      retryCount: options?.retryCount ?? 3,
     });
     this.apiKeys = new ApiKeys(this.api);
     this.projects = new Projects(this.api);
     this.accounts = new Accounts(this.api);
-
-    Object.defineProperty(this, "enable", {
-      configurable: false,
-      writable: false,
-      enumerable: true,
-      value: typeof options?.enable === "boolean" ? options.enable : true,
-    });
   }
 
   /*
