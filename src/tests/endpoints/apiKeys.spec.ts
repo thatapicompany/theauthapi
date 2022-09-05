@@ -1,7 +1,7 @@
 import TheAuthAPI from "../../index";
 import testServer from "../testServer/server";
 import { Server } from "http";
-import { shouldThrowError, shouldThrowTypeError } from "../util";
+import { shouldThrowError } from "../util";
 import ApiResponseError from "../../services/ApiRequest/ApiResponseError";
 import ApiKeys from "../../endpoints/ApiKeys/ApiKeys";
 
@@ -296,103 +296,5 @@ describe("ApiKeys", () => {
     ).toEqual(
       "/api-keys/?projectId=123&customUserId=USR1&customAccountId=ACC1&isActive=true"
     );
-  });
-
-  it("should validate parameter types", async () => {
-    const client = createClient();
-    await shouldThrowTypeError(() =>
-      client.apiKeys.isValidKey(undefined as any)
-    );
-    await shouldThrowTypeError(() => client.apiKeys.getKey(undefined as any));
-    await shouldThrowTypeError(() =>
-      client.apiKeys.deleteKey(undefined as any)
-    );
-    await shouldThrowTypeError(() =>
-      client.apiKeys.createKey(undefined as any)
-    );
-    await shouldThrowTypeError(() =>
-      client.apiKeys.createKey({ projectId: "1" } as any)
-    );
-    await shouldThrowTypeError(() =>
-      client.apiKeys.createKey({
-        name: "a",
-        projectId: "1",
-        key: undefined,
-      } as any)
-    );
-    await shouldThrowTypeError(() =>
-      client.apiKeys.createKey({
-        name: "a",
-        projectId: "1",
-        customAccountId: undefined,
-      } as any)
-    );
-    await shouldThrowTypeError(() =>
-      client.apiKeys.createKey({
-        name: "a",
-        projectId: "1",
-        customUserId: undefined,
-      } as any)
-    );
-    await shouldThrowTypeError(() =>
-      client.apiKeys.createKey({
-        name: "a",
-        projectId: "1",
-        customUserId: undefined,
-        rateLimitConfigs: {
-          rateLimit: "1",
-          rateLimitTtl: 123,
-        },
-      } as any)
-    );
-    await shouldThrowTypeError(() =>
-      client.apiKeys.createKey({
-        name: "a",
-        projectId: "1",
-        customUserId: undefined,
-        rateLimitConfigs: {
-          rateLimit: 123,
-          rateLimitTtl: "1",
-        },
-      } as any)
-    );
-    await shouldThrowTypeError(() =>
-      client.apiKeys.createKey({
-        name: "a",
-        projectId: "1",
-        expiry: "not a date",
-      } as any)
-    );
-    await shouldThrowTypeError(() =>
-      client.apiKeys.updateKey(undefined as any, {} as any)
-    );
-    await shouldThrowTypeError(() =>
-      client.apiKeys.updateKey(
-        undefined as any,
-        { name: "a", customAccountId: undefined } as any
-      )
-    );
-  });
-
-  it("should validate query filters", () => {
-    const client = createClient();
-    const apiKeys = client.apiKeys;
-    expect(() =>
-      apiKeys["getKeysFilterEndpoint"]({ isActive: 1 as any })
-    ).toThrow(TypeError);
-    expect(() =>
-      apiKeys["getKeysFilterEndpoint"]({
-        customUserId: 1 as any,
-        isActive: false,
-      })
-    ).toThrow(TypeError);
-    expect(() =>
-      apiKeys["getKeysFilterEndpoint"]({
-        customAccountId: 1 as any,
-      })
-    ).toThrow(TypeError);
-    expect(() =>
-      apiKeys["getKeysFilterEndpoint"]({ projectId: 1 as any })
-    ).toThrow(TypeError);
   });
 });
