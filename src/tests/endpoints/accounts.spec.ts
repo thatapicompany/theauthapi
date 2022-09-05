@@ -1,7 +1,6 @@
 import TheAuthAPI from "../../index";
 import { Server } from "http";
 import testServer from "../testServer/server";
-import { shouldThrowTypeError } from "../util";
 
 const port = 4063;
 
@@ -40,9 +39,4 @@ describe("Accounts", () => {
       })
     );
   });
-
-  it("should validate parameter types", async () => {
-    const client = createClient();
-    await shouldThrowTypeError(() => client.accounts.getAccount(undefined as any));
-  })
 });
