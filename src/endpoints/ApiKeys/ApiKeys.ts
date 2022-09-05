@@ -124,23 +124,32 @@ class ApiKeys implements ApiKeysInterface {
   }
 
   private validateFiltersInput(filter?: ApiKeyFilter) {
-    if (filter) {
-      if (filter.isActive && typeof filter.isActive !== "boolean") {
-        throw TypeError("isActive must be a boolean");
-      }
-      Object.entries(omit(filter, "isActive")).forEach(([key, value]) => {
-        validateString(key, value);
-      });
+    if (!filter) {
+      return;
+    }
+    if (filter.isActive && typeof filter.isActive !== "boolean") {
+      throw TypeError("isActive must be a boolean");
+    }
+    if (filter.customAccountId) {
+      validateString("customAccountId", filter.customAccountId);
+    }
+    if (filter.customUserId) {
+      validateString("customUserId", filter.customUserId);
+    }
+    if (filter.projectId) {
+      validateString("projectId", filter.projectId);
     }
   }
 
   private getKeysFilterEndpoint(filter?: ApiKeyFilter): string {
     this.validateFiltersInput(filter);
     let filters: string[] = [];
-    if (filter) {
+    if (filter !== undefined) {
       filters = Object.entries(filter).map(([key, value]) => `${key}=${value}`);
     }
-    return `${this.endpoint}${filter ? "?" : ""}${filters.join("&")}`;
+    return `${this.endpoint}${filter !== undefined ? "?" : ""}${filters.join(
+      "&"
+    )}`;
   }
 }
 

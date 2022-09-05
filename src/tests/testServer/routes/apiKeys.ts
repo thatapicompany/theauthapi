@@ -92,7 +92,10 @@ export const apiKeyRoutes = router
       return response.json(keys.slice(1));
     }
     const filtered = keys.filter((key) => {
-      if (isActive && key.isActive !== (isActive === "true")) {
+      if (
+        (isActive && key.isActive !== (isActive === "true")) ||
+        !key.isActive
+      ) {
         return false;
       }
       if (

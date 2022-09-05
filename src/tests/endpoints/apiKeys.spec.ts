@@ -140,6 +140,50 @@ describe("ApiKeys", () => {
     );
   });
 
+  it("should filter api keys using customUserId", async () => {
+    const client = createClient();
+    const keys = await client.apiKeys.getKeys({
+      projectId: "b52262b5-eaa6-4edd-825c-ebcdf76a10e5",
+      customUserId: null,
+    });
+    expect(keys).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          key: "KGTSsxbDndjRRcpJGuQQp2or9UmQkqRrVQpCWgQruIXnvnNatmfdmOTcsgYnNwnH",
+          name: "My customers first Api Key",
+          customMetaData: {},
+          customAccountId: "acc-id",
+          customUserId: null,
+          env: "live",
+          createdAt: new Date("2022-03-16T10:34:23.353Z"),
+          updatedAt: new Date("2022-03-16T10:34:23.353Z"),
+          isActive: true,
+        }),
+      ])
+    );
+  });
+
+  it("should filter api keys using customAccountId", async () => {
+    const client = createClient();
+    const keys = await client.apiKeys.getKeys({
+      projectId: "b52262b5-eaa6-4edd-825c-ebcdf76a10e5",
+      customAccountId: null,
+    });
+    expect(keys).toEqual([
+      {
+        key: "live_h3uDZInxQexGLkwoxMDmuqz6PsyXGjkbrmSTpEwFb8l97mdAlQKtt14kt9Rv91PL",
+        name: "my-first-api-key",
+        customMetaData: {},
+        customAccountId: null,
+        customUserId: "USR123",
+        env: "live",
+        createdAt: new Date("2022-04-03T01:59:32.051Z"),
+        updatedAt: new Date("2022-04-03T01:59:32.051Z"),
+        isActive: true,
+      },
+    ]);
+  });
+
   it("should create a key", async () => {
     const client = createClient();
     const key = await client.apiKeys.createKey({
