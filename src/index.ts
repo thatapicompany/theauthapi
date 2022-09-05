@@ -2,7 +2,6 @@ import assert from "assert";
 import removeSlash from "remove-trailing-slash";
 
 import ApiRequest from "./services/ApiRequest/ApiRequest";
-import { validateString } from "./util";
 import ApiKeys from "./endpoints/ApiKeys/ApiKeys";
 import { HttpMethod } from "./services/ApiRequest/HttpMethod";
 import Projects from "./endpoints/Projects/Projects";
@@ -72,8 +71,6 @@ class TheAuthAPI {
     key: string,
     callback?: (err: any, data: any) => any
   ) {
-    validateString("key", key);
-
     const cb = callback || noop;
     const done = (err: any) => {
       cb(err, data);
