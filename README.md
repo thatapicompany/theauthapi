@@ -59,7 +59,6 @@ You can also provide custom options:
 
 ```javascript
 const theAuthAPI = new TheAuthAPI("YOUR_ACCESS_KEY", {
-  timeout: 3600,
   retryCount: 2,
 });
 ```
@@ -70,8 +69,6 @@ const theAuthAPI = new TheAuthAPI("YOUR_ACCESS_KEY", {
 type Options = {
   // server url
   host?: string;
-  // request timeout in ms
-  timeout?: string | number;
   // number of retries before failing
   retryCount?: number;
 };
@@ -165,10 +162,12 @@ try {
 ```typescript
 type ApiKeyFilter = {
   projectId?: string;
-  customAccountId?: string;
-  customUserId?: string;
+  name?: string;
+  customAccountId?: string | null;
+  customUserId?: string | null;
   isActive?: boolean;
 };
+
 ```
 
 **Example**: filtering api-keys with a specific `projectId` where the keys are not active

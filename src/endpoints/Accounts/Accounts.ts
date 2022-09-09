@@ -2,7 +2,6 @@ import { AccountsInterface } from "./AccountsInterface";
 import ApiRequest from "../../services/ApiRequest/ApiRequest";
 import { Account } from "../../types";
 import { HttpMethod } from "../../services/ApiRequest/HttpMethod";
-import { validateString } from "../../util";
 
 class Accounts implements AccountsInterface {
   api: ApiRequest;
@@ -14,7 +13,6 @@ class Accounts implements AccountsInterface {
   }
 
   async getAccount(accountId: string): Promise<Account> {
-    validateString("accountId", accountId);
     return await this.api.request<Account>(
       HttpMethod.GET,
       `${this.endpoint}/${accountId}`

@@ -1,7 +1,7 @@
 import TheAuthAPI from "../../index";
 import testServer from "../testServer/server";
 import { Server } from "http";
-import { shouldThrowError, shouldThrowTypeError } from "../util";
+import { shouldThrowError } from "../util";
 import ApiResponseError from "../../services/ApiRequest/ApiResponseError";
 import ApiKeys from "../../endpoints/ApiKeys/ApiKeys";
 
@@ -140,6 +140,71 @@ describe("ApiKeys", () => {
     );
   });
 
+  it("should filter api keys using customUserId", async () => {
+    const client = createClient();
+    const keys = await client.apiKeys.getKeys({
+      projectId: "b52262b5-eaa6-4edd-825c-ebcdf76a10e5",
+      customUserId: null,
+    });
+    expect(keys).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          key: "KGTSsxbDndjRRcpJGuQQp2or9UmQkqRrVQpCWgQruIXnvnNatmfdmOTcsgYnNwnH",
+          name: "My customers first Api Key",
+          customMetaData: {},
+          customAccountId: "acc-id",
+          customUserId: null,
+          env: "live",
+          createdAt: new Date("2022-03-16T10:34:23.353Z"),
+          updatedAt: new Date("2022-03-16T10:34:23.353Z"),
+          isActive: true,
+        }),
+      ])
+    );
+  });
+
+  it("should filter api keys using name", async () => {
+    const client = createClient();
+    const keys = await client.apiKeys.getKeys({
+      projectId: "b52262b5-eaa6-4edd-825c-ebcdf76a10e5",
+      name: "my-first-api-key",
+    });
+    expect(keys).toEqual([
+      {
+        key: "live_h3uDZInxQexGLkwoxMDmuqz6PsyXGjkbrmSTpEwFb8l97mdAlQKtt14kt9Rv91PL",
+        name: "my-first-api-key",
+        customMetaData: {},
+        customAccountId: null,
+        customUserId: "USR123",
+        env: "live",
+        createdAt: new Date("2022-04-03T01:59:32.051Z"),
+        updatedAt: new Date("2022-04-03T01:59:32.051Z"),
+        isActive: true,
+      },
+    ]);
+  });
+
+  it("should filter api keys using customAccountId", async () => {
+    const client = createClient();
+    const keys = await client.apiKeys.getKeys({
+      projectId: "b52262b5-eaa6-4edd-825c-ebcdf76a10e5",
+      customAccountId: null,
+    });
+    expect(keys).toEqual([
+      {
+        key: "live_h3uDZInxQexGLkwoxMDmuqz6PsyXGjkbrmSTpEwFb8l97mdAlQKtt14kt9Rv91PL",
+        name: "my-first-api-key",
+        customMetaData: {},
+        customAccountId: null,
+        customUserId: "USR123",
+        env: "live",
+        createdAt: new Date("2022-04-03T01:59:32.051Z"),
+        updatedAt: new Date("2022-04-03T01:59:32.051Z"),
+        isActive: true,
+      },
+    ]);
+  });
+
   it("should create a key", async () => {
     const client = createClient();
     const key = await client.apiKeys.createKey({
@@ -200,6 +265,17 @@ describe("ApiKeys", () => {
     expect(response).toBeTruthy();
   });
 
+  it("should reactivate a key", async () => {
+    const client = createClient();
+    const key = await client.apiKeys.reactivateKey(
+      "live_TVHW0PVtktylIVObMd8J0sBHb7Ym3ZraObpeT3qxu7YRHig2KxrEIwggn50sBpSZ"
+    );
+    expect(key.name).toEqual("my-first-api-key");
+    expect(key.key).toEqual(
+      "live_h3uDZInxQexGLkwoxMDmuqz6PsyXGjkbrmSTpEwFb8l97mdAlQKtt14kt9Rv91PL"
+    );
+  });
+
   it("getKeysFilterEndpoint", async () => {
     const client = createClient();
     const apiKeys = client.apiKeys;
@@ -220,74 +296,5 @@ describe("ApiKeys", () => {
     ).toEqual(
       "/api-keys/?projectId=123&customUserId=USR1&customAccountId=ACC1&isActive=true"
     );
-  });
-
-  it("should validate parameter types", async () => {
-    const client = createClient();
-    await shouldThrowTypeError(() =>
-      client.apiKeys.isValidKey(undefined as any)
-    );
-    await shouldThrowTypeError(() => client.apiKeys.getKey(undefined as any));
-    await shouldThrowTypeError(() =>
-      client.apiKeys.deleteKey(undefined as any)
-    );
-    await shouldThrowTypeError(() =>
-      client.apiKeys.createKey(undefined as any)
-    );
-    await shouldThrowTypeError(() =>
-      client.apiKeys.createKey({ projectId: "1" } as any)
-    );
-    await shouldThrowTypeError(() =>
-      client.apiKeys.createKey({
-        name: "a",
-        projectId: "1",
-        key: undefined,
-      } as any)
-    );
-    await shouldThrowTypeError(() =>
-      client.apiKeys.createKey({
-        name: "a",
-        projectId: "1",
-        customAccountId: undefined,
-      } as any)
-    );
-    await shouldThrowTypeError(() =>
-      client.apiKeys.createKey({
-        name: "a",
-        projectId: "1",
-        customUserId: undefined,
-      } as any)
-    );
-    await shouldThrowTypeError(() =>
-      client.apiKeys.updateKey(undefined as any, {} as any)
-    );
-    await shouldThrowTypeError(() =>
-      client.apiKeys.updateKey(
-        undefined as any,
-        { name: "a", customAccountId: undefined } as any
-      )
-    );
-  });
-
-  it("should validate query filters", () => {
-    const client = createClient();
-    const apiKeys = client.apiKeys;
-    expect(() =>
-      apiKeys["getKeysFilterEndpoint"]({ isActive: 1 as any })
-    ).toThrow(TypeError);
-    expect(() =>
-      apiKeys["getKeysFilterEndpoint"]({
-        customUserId: 1 as any,
-        isActive: false,
-      })
-    ).toThrow(TypeError);
-    expect(() =>
-      apiKeys["getKeysFilterEndpoint"]({
-        customAccountId: 1 as any,
-      })
-    ).toThrow(TypeError);
-    expect(() =>
-      apiKeys["getKeysFilterEndpoint"]({ projectId: 1 as any })
-    ).toThrow(TypeError);
   });
 });

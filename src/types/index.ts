@@ -1,18 +1,18 @@
 export type ApiKey = {
   key: string;
   name: string;
-  customMetaData: object;
+  customMetaData: AnyJson;
   customAccountId: string;
   customUserId: string;
   env: Environment;
   createdAt: Date;
   updatedAt: Date;
   isActive: boolean;
+  rateLimitConfigs: RateLimitConfiguration;
+  expiry: Date;
 };
 
 export type RateLimitConfiguration = {
-  rateLimitedEntity?: string;
-  ratelimitedEnitityId?: string;
   rateLimit: number;
   rateLimitTtl: number;
 };
@@ -21,23 +21,29 @@ export type ApiKeyInput = {
   name: string;
   projectId?: string;
   key?: string;
-  customMetaData?: object;
+  customMetaData?: AnyJson;
   customAccountId?: string;
   customUserId?: string;
   rateLimitConfigs?: RateLimitConfiguration;
+  expiry?: Date;
 };
 
 export type ApiKeyFilter = {
   projectId?: string;
-  customAccountId?: string;
-  customUserId?: string;
+  name?: string;
+  customAccountId?: string | null;
+  customUserId?: string | null;
   isActive?: boolean;
 };
 
 export type UpdateApiKeyInput = {
   name: string;
-  customMetaData?: object;
+  key?: string;
+  customMetaData?: AnyJson;
   customAccountId?: string;
+  customUserId?: string;
+  expiry?: Date | null;
+  rateLimitConfigs?: RateLimitConfiguration | null;
 };
 
 export enum AuthedEntityType {
@@ -82,3 +88,9 @@ export type Account = AuthBaseEntity & {
   id: string;
   name: string;
 };
+
+type AnyJson = boolean | number | string | null | JsonArray | JsonMap;
+type JsonMap = {
+  [key: string]: AnyJson;
+};
+type JsonArray = Array<AnyJson>;

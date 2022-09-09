@@ -39,7 +39,7 @@ const keys = [
 ];
 
 export const apiKeyRoutes = router
-  .get("/auth/:key", (request, response) => {
+  .post("/auth/:key", (request, response) => {
     const key = request.params.key;
     if (!key) {
       return response.status(400).json({
@@ -84,7 +84,7 @@ export const apiKeyRoutes = router
     return response.json(keys[0]);
   })
   .get("/", (request, response) => {
-    const { projectId, isActive, customAccountId, customUserId } =
+    const { projectId, isActive, customAccountId, customUserId, name } =
       request.query;
 
     if (!projectId) {
@@ -92,7 +92,10 @@ export const apiKeyRoutes = router
       return response.json(keys.slice(1));
     }
     const filtered = keys.filter((key) => {
-      if (isActive && key.isActive !== (isActive === "true")) {
+      if (
+        (isActive && key.isActive !== (isActive === "true")) ||
+        !key.isActive
+      ) {
         return false;
       }
       if (
@@ -106,6 +109,9 @@ export const apiKeyRoutes = router
         key.customAccountId !==
           (customAccountId === "null" ? null : customAccountId)
       ) {
+        return false;
+      }
+      if (name && key.name.toLowerCase() !== (name as string).toLowerCase()) {
         return false;
       }
       return true;
@@ -147,6 +153,15 @@ export const apiKeyRoutes = router
       });
     }
     return response.json({ ...keys[1], name });
+  })
+  .patch("/:key/reactivate", (request, response) => {
+    const { key } = request.params;
+    if (!key) {
+      return response.status(400).json({
+        message: "missing api-key",
+      });
+    }
+    return response.json(keys[1]);
   })
   .delete("/:key", (request, response) => {
     const { key } = request.params;

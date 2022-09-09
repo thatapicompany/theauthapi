@@ -13,4 +13,5 @@ export interface ApiKeysInterface {
   createKey(apiKey: ApiKeyInput): Promise<ApiKey>;
   updateKey(apiKey: string, updateTo: UpdateApiKeyInput): Promise<ApiKey>;
   deleteKey(apiKey: string): Promise<boolean>;
+  reactivateKey(apiKey: string): Promise<ApiKey>;
 }
