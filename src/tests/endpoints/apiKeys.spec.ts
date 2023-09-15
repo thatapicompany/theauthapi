@@ -257,6 +257,16 @@ describe("ApiKeys", () => {
     );
   });
 
+  it("should rotate a key", async () => {
+    const client = createClient();
+    const key = await client.apiKeys.rotateKey(
+      "live_TVHW0PVtktylIVObMd8J0sBHb7Ym3ZraObpeT3qxu7YRHig2KxrEIwggn50sBpSZ"
+    );
+    expect(key.key).not.toEqual(
+      "live_TVHW0PVtktylIVObMd8J0sBHb7Ym3ZraObpeT3qxu7YRHig2KxrEIwggn50sBpSZ"
+    );
+  });
+
   it("should delete a key", async () => {
     const client = createClient();
     const response = await client.apiKeys.deleteKey(

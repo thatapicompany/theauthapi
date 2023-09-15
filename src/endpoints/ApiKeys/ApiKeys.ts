@@ -75,6 +75,13 @@ class ApiKeys implements ApiKeysInterface {
     );
   }
 
+  async rotateKey(apiKey: string): Promise<ApiKey> {
+    return await this.api.request<ApiKey>(
+      HttpMethod.POST,
+      `/api-keys/${apiKey}/rotate`
+    );
+  }
+
   private getKeysFilterEndpoint(filter?: ApiKeyFilter): string {
     let filters: string[] = [];
     if (filter !== undefined) {
