@@ -5,13 +5,22 @@
 - [Client library for TheAuthAPI](#client-library-for-theauthapi)
   - [Installation](#installation)
   - [Configuration](#configuration)
+    - [Imports](#imports)
+      - [CommonJS](#commonjs)
+      - [ES Modules](#es-modules)
   - [Usage](#usage)
     - [Example: Validating an API-Key](#example-validating-an-api-key)
-    - [Example: Listing API-Keys](#example-listing-api-keys)
+    - [Example: Listing API-keys](#example-listing-api-keys)
     - [Example: Listing the projects of an account](#example-listing-the-projects-of-an-account)
     - [Example: Listing projects and associated API-Keys](#example-listing-projects-and-associated-api-keys)
     - [Example: Creating an API-Key](#example-creating-an-api-key)
+    - [Example: Rotating an API-Key](#example-rotating-an-api-key)
     - [Handling Errors](#handling-errors)
+      - [ApiRequestError](#apirequesterror)
+      - [ApiResponseError](#apiresponseerror)
+      - [Example: Getting a key throws an ApiResponseError if the key is invalid](#example-getting-a-key-throws-an-apiresponseerror-if-the-key-is-invalid)
+      - [Error](#error)
+      - [Handling Errors the Right Way](#handling-errors-the-right-way)
     - [Typescript](#typescript)
     - [📙 Further Reading](#-further-reading)
 
@@ -157,7 +166,7 @@ try {
 }
 ```
 
-**Filtering API Keys**: You can filter the listed API keys by passing an object of type filter as an argument to `getKeys` 
+**Filtering API Keys**: You can filter the listed API keys by passing an object of type filter as an argument to `getKeys`
 
 ```typescript
 type ApiKeyFilter = {
@@ -167,7 +176,6 @@ type ApiKeyFilter = {
   customUserId?: string | null;
   isActive?: boolean;
 };
-
 ```
 
 **Example**: filtering api-keys with a specific `projectId` where the keys are not active
@@ -183,8 +191,8 @@ try {
 }
 ```
 
-**NOTE** that if your access key is at account level, you need to specify `projectId` when listing the API keys: 
-`getKeys({ projectId: "PROJECT_ID" })`, otherwise if your access key is created at project level, you don't have to specify `projectId`, 
+**NOTE** that if your access key is at account level, you need to specify `projectId` when listing the API keys:
+`getKeys({ projectId: "PROJECT_ID" })`, otherwise if your access key is created at project level, you don't have to specify `projectId`,
 the access key's `projectId` will be used to get the API-keys (i.e. you'll see only the keys of the project your access key is created against)
 
 #### Example: Listing the projects of an account
@@ -252,6 +260,30 @@ try {
   console.log("Couldn't make the key ", error);
 }
 ```
+
+#### Example: Rotating an API-Key
+
+When you need to quickly and securely rotate a compromised key, while preserving the key's metadata, use the `rotateKey` method. This method while clone your key and return you with a new one.
+
+```javascript
+theAuthAPI.apiKeys
+  .rotateKey("API_KEY")
+  .then((key) => console.log("Rotated Key > ", key))
+  .catch((error) => console.log("Couldn't rotate the key", error));
+```
+
+**Using async/await**
+
+```javascript
+try {
+  const key = await theAuthAPI.apiKeys.createKey("API_KEY");
+  console.log("Rotated Key > ", key);
+} catch (error) {
+  console.log("Couldn't rotate the key", error);
+}
+```
+
+**NOTE** In the background, this marks the old key as inactive and issues you with a new key. Any requests to the old key will be instantly blocked.
 
 ### Handling Errors
 
