@@ -1,6 +1,6 @@
 {
   "name": "theauthapi",
-  "version": "1.0.12",
+  "version": "1.0.1-2.1",
   "description": "Client library for TheAuthAPI.com",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
