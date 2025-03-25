@@ -31,7 +31,7 @@
   "homepage": "https://github.com/thatapicompany/theauthapi#readme",
   "dependencies": {
     "assert": "^2.0.0",
-    "axios": "^0.21.4",
+    "axios": "^1.8.4",
     "axios-retry": "^3.1.9",
     "remove-trailing-slash": "^0.1.1"
   },
