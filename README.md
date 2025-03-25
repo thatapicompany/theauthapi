@@ -49,7 +49,7 @@ For further instructions on creating an account, check out our [how to guides](h
 #### CommonJS
 
 ```javascript
-const TheAuthAPI = require("theauthapi").default;
+const TheAuthAPI = require("theauthapi");
 ```
 
 #### ES Modules
