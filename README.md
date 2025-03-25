@@ -347,7 +347,7 @@ Example of usage with Typescript:
 
 ```typescript
 import TheAuthAPI from "theauthapi";
-import { Project } from "theauthapi/types";
+import { Project } from "theauthapi/dist/types";
 
 const client = new TheAuthAPI("ACCESS_KEY");
 
