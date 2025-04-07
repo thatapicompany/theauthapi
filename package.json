@@ -20,7 +20,9 @@
     "ci": "npm run build && npm run test",
     "changeset": "npx changeset",
     "prepublishOnly": "npm run ci",
-    "local-release": "changeset version && changeset publish"
+    "local-release": "changeset version && changeset publish",
+    "format": "prettier --write .",
+    "check-format": "prettier --check ."
   },
   "repository": {
     "type": "git",
