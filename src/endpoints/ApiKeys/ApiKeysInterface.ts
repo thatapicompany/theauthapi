@@ -3,7 +3,7 @@ import {
   ApiKeyFilter,
   ApiKeyInput,
   UpdateApiKeyInput,
-} from "../../types";
+} from '../../types';
 
 export interface ApiKeysInterface {
   isValidKey(apiKey: string): Promise<boolean>;

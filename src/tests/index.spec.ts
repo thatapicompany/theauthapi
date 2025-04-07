@@ -1,6 +1,6 @@
-import TheAuthAPI from "../index";
-import { Server } from "http";
-import testServer from "./testServer/server";
+import TheAuthAPI from '../index';
+import { Server } from 'http';
+import testServer from './testServer/server';
 
 const port = 4063;
 
@@ -9,12 +9,12 @@ const createClient = (options?: any) => {
     {
       host: `http://localhost:${port}`,
     },
-    options
+    options,
   );
-  return new TheAuthAPI("access_key", options);
+  return new TheAuthAPI('access_key', options);
 };
 
-describe("index", () => {
+describe('index', () => {
   let server: Server;
   beforeAll(() => {
     server = testServer.listen(port);
@@ -23,13 +23,13 @@ describe("index", () => {
   afterAll(() => {
     server.close();
   });
-  it("should authenticate a valid key [legacy]", async () => {
+  it('should authenticate a valid key [legacy]', async () => {
     const client = createClient();
     const data: any = await client.authenticateAPIKey(
-      "aaa13d30-135e-11ec-8e0f-f1de8e89"
+      'aaa13d30-135e-11ec-8e0f-f1de8e89',
     );
-    expect(data.customUserId).toEqual("my-user-id");
-    expect(data.customAccountId).toEqual("acc-id");
+    expect(data.customUserId).toEqual('my-user-id');
+    expect(data.customAccountId).toEqual('acc-id');
     expect(data.authenticated).toBeTruthy();
   }, 30000);
 });

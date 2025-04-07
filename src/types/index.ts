@@ -47,8 +47,8 @@ export type UpdateApiKeyInput = {
 };
 
 export enum AuthedEntityType {
-  USER = "USER",
-  ACCESS_KEY = "ACCESS_KEY",
+  USER = 'USER',
+  ACCESS_KEY = 'ACCESS_KEY',
 }
 
 export type AuthBaseEntity = {
@@ -70,8 +70,8 @@ export type Project = AuthBaseEntity & {
 };
 
 export enum Environment {
-  LIVE = "live",
-  TEST = "test",
+  LIVE = 'live',
+  TEST = 'test',
 }
 
 export type CreateProjectInput = {

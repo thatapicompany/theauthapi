@@ -49,25 +49,25 @@ For further instructions on creating an account, check out our [how to guides](h
 #### CommonJS
 
 ```javascript
-const TheAuthAPI = require("theauthapi");
+const TheAuthAPI = require('theauthapi');
 ```
 
 #### ES Modules
 
 ```typescript
-import TheAuthAPI from "theauthapi";
+import TheAuthAPI from 'theauthapi';
 ```
 
 initialize the client using your access key:
 
 ```javascript
-const theAuthAPI = new TheAuthAPI("YOUR_ACCESS_KEY");
+const theAuthAPI = new TheAuthAPI('YOUR_ACCESS_KEY');
 ```
 
 You can also provide custom options:
 
 ```javascript
-const theAuthAPI = new TheAuthAPI("YOUR_ACCESS_KEY", {
+const theAuthAPI = new TheAuthAPI('YOUR_ACCESS_KEY', {
   retryCount: 2,
 });
 ```
@@ -117,12 +117,12 @@ You can easily validate an API key using `apiKeys.isValidKey` which returns `tru
 
 ```javascript
 theAuthAPI.apiKeys
-  .isValidKey("API_KEY")
+  .isValidKey('API_KEY')
   .then((isValidKey) => {
     if (isValidKey) {
-      console.log("The API is valid!");
+      console.log('The API is valid!');
     } else {
-      console.log("Invalid API key!");
+      console.log('Invalid API key!');
     }
   })
   .catch((error) => {
@@ -134,11 +134,11 @@ theAuthAPI.apiKeys
 
 ```javascript
 try {
-  const isValidKey = await theAuthAPI.apiKeys.isValidKey("API_KEY");
+  const isValidKey = await theAuthAPI.apiKeys.isValidKey('API_KEY');
   if (isValidKey) {
-    console.log("The API is valid!");
+    console.log('The API is valid!');
   } else {
-    console.log("Invalid API key!");
+    console.log('Invalid API key!');
   }
 } catch (error) {
   // handle network error
@@ -183,7 +183,7 @@ type ApiKeyFilter = {
 ```javascript
 try {
   const keys = await theAuthAPI.apiKeys.getKeys({
-    projectId: "PROJECT_ID",
+    projectId: 'PROJECT_ID',
     isActive: false,
   });
 } catch (error) {
@@ -199,7 +199,7 @@ the access key's `projectId` will be used to get the API-keys (i.e. you'll see o
 
 ```javascript
 theAuthAPI.projects
-  .getProjects("ACCOUNT_ID")
+  .getProjects('ACCOUNT_ID')
   .then((projects) => console.log(projects))
   .catch((error) => console.log(error));
 ```
@@ -208,7 +208,7 @@ theAuthAPI.projects
 
 ```javascript
 try {
-  const projects = await client.projects.getProjects("ACCOUNT_ID");
+  const projects = await client.projects.getProjects('ACCOUNT_ID');
 } catch (error) {
   console.log(error);
 }
@@ -236,12 +236,12 @@ async function getProjectsWithKeys(accountId: string) {
 ```javascript
 theAuthAPI.apiKeys
   .createKey({
-    projectId: "PROJECT_ID",
-    customMetaData: { metadata_val: "value to store" },
-    customAccountId: "[any info you want]",
-    name: "[any info you want e.g. name of customer or the key]",
+    projectId: 'PROJECT_ID',
+    customMetaData: { metadata_val: 'value to store' },
+    customAccountId: '[any info you want]',
+    name: '[any info you want e.g. name of customer or the key]',
   })
-  .then((key) => console.log("Key created > ", key))
+  .then((key) => console.log('Key created > ', key))
   .catch((error) => console.log("Couldn't make the key", error));
 ```
 
@@ -250,12 +250,12 @@ theAuthAPI.apiKeys
 ```javascript
 try {
   const key = await theAuthAPI.apiKeys.createKey({
-    projectId: "PROJECT_ID",
-    customMetaData: { metadata_val: "value to store" },
-    customAccountId: "[any info you want]",
-    name: "[any info you want e.g. name of customer or the key]",
+    projectId: 'PROJECT_ID',
+    customMetaData: { metadata_val: 'value to store' },
+    customAccountId: '[any info you want]',
+    name: '[any info you want e.g. name of customer or the key]',
   });
-  console.log("Key created > ", key);
+  console.log('Key created > ', key);
 } catch (error) {
   console.log("Couldn't make the key ", error);
 }
@@ -267,8 +267,8 @@ When you need to quickly and securely rotate a compromised key, while preserving
 
 ```javascript
 theAuthAPI.apiKeys
-  .rotateKey("API_KEY")
-  .then((key) => console.log("Rotated Key > ", key))
+  .rotateKey('API_KEY')
+  .then((key) => console.log('Rotated Key > ', key))
   .catch((error) => console.log("Couldn't rotate the key", error));
 ```
 
@@ -276,8 +276,8 @@ theAuthAPI.apiKeys
 
 ```javascript
 try {
-  const key = await theAuthAPI.apiKeys.createKey("API_KEY");
-  console.log("Rotated Key > ", key);
+  const key = await theAuthAPI.apiKeys.createKey('API_KEY');
+  console.log('Rotated Key > ', key);
 } catch (error) {
   console.log("Couldn't rotate the key", error);
 }
@@ -326,7 +326,7 @@ Since all the possible thrown errors are instances of classes, we can check the 
 
 ```javascript
 try {
-  const key = await theAuthAPI.apiKeys.getKey("KEY");
+  const key = await theAuthAPI.apiKeys.getKey('KEY');
 } catch (error) {
   if (error instanceof ApiResponseError) {
     // handle response error
@@ -346,10 +346,10 @@ This library is written in [Typescript](https://www.typescriptlang.org/), types 
 Example of usage with Typescript:
 
 ```typescript
-import TheAuthAPI from "theauthapi";
-import { Project } from "theauthapi/dist/types";
+import TheAuthAPI from 'theauthapi';
+import { Project } from 'theauthapi/dist/types';
 
-const client = new TheAuthAPI("ACCESS_KEY");
+const client = new TheAuthAPI('ACCESS_KEY');
 
 async function getProjectsIds(accountId: string): Promise<string[]> {
   const projects: Project[] = await client.projects.getProjects(accountId);

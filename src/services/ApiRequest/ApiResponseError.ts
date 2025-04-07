@@ -10,7 +10,7 @@ class ApiResponseError extends Error {
   constructor(statusCode: number, message: string) {
     super(`(${statusCode}): ${message}`);
     this.statusCode = statusCode;
-    this.name = "ApiResponseError";
+    this.name = 'ApiResponseError';
   }
 }
 

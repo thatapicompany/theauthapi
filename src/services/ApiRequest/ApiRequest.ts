@@ -1,11 +1,11 @@
-import axios from "axios";
-import { version } from "../../libraryMeta";
-import { HttpMethod } from "./HttpMethod";
-import ApiCall from "./ApiCall";
-import ApiRequestError from "./ApiRequestError";
-import axiosRetry from "axios-retry";
-import ms from "ms";
-import ApiResponseError from "./ApiResponseError";
+import axios from 'axios';
+import { version } from '../../libraryMeta';
+import { HttpMethod } from './HttpMethod';
+import ApiCall from './ApiCall';
+import ApiRequestError from './ApiRequestError';
+import axiosRetry from 'axios-retry';
+import ms from 'ms';
+import ApiResponseError from './ApiResponseError';
 
 type Config = {
   host: string;
@@ -38,17 +38,17 @@ class ApiRequest implements ApiCall {
     const isoDateFormat =
       /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d*)?(?:[-+]\d{2}:?\d{2}|Z)?$/;
     function isIsoDateString(value: any): boolean {
-      return value && typeof value === "string" && isoDateFormat.test(value);
+      return value && typeof value === 'string' && isoDateFormat.test(value);
     }
     function handleDates(body: any) {
-      if (body === null || body === undefined || typeof body !== "object") {
+      if (body === null || body === undefined || typeof body !== 'object') {
         return body;
       }
       for (const key of Object.keys(body)) {
         const value = body[key];
         if (isIsoDateString(value)) {
           body[key] = new Date(value);
-        } else if (typeof value === "object") {
+        } else if (typeof value === 'object') {
           handleDates(value);
         }
       }
@@ -69,7 +69,7 @@ class ApiRequest implements ApiCall {
   async request<T>(
     method: HttpMethod,
     endpoint: string,
-    payload?: any
+    payload?: any,
   ): Promise<T> {
     try {
       const response = await axios.request<T>({
@@ -85,7 +85,7 @@ class ApiRequest implements ApiCall {
         if (error.response) {
           throw new ApiResponseError(
             error.response.status,
-            error.response.data.message ?? error.response.statusText
+            error.response.data.message ?? error.response.statusText,
           );
         } else if (error.request) {
           throw new ApiRequestError(error.message);
@@ -97,9 +97,9 @@ class ApiRequest implements ApiCall {
 
   _generateDefaultHeaders() {
     return {
-      "user-agent": `theauthapi-client-node/${version}`,
-      "x-api-key": this.accessKey,
-      "api-key": this.accessKey,
+      'user-agent': `theauthapi-client-node/${version}`,
+      'x-api-key': this.accessKey,
+      'api-key': this.accessKey,
     };
   }
 

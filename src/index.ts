@@ -1,11 +1,11 @@
-import assert from "assert";
-import removeSlash from "remove-trailing-slash";
+import assert from 'assert';
+import removeSlash from 'remove-trailing-slash';
 
-import ApiRequest from "./services/ApiRequest/ApiRequest";
-import ApiKeys from "./endpoints/ApiKeys/ApiKeys";
-import { HttpMethod } from "./services/ApiRequest/HttpMethod";
-import Projects from "./endpoints/Projects/Projects";
-import Accounts from "./endpoints/Accounts/Accounts";
+import ApiRequest from './services/ApiRequest/ApiRequest';
+import ApiKeys from './endpoints/ApiKeys/ApiKeys';
+import { HttpMethod } from './services/ApiRequest/HttpMethod';
+import Projects from './endpoints/Projects/Projects';
+import Accounts from './endpoints/Accounts/Accounts';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
@@ -34,7 +34,7 @@ class TheAuthAPI {
   constructor(accessKey: string, options?: Options) {
     assert(accessKey, "You must pass your project's write key.");
     this.accessKey = accessKey;
-    this.host = removeSlash(options?.host || "https://api.theauthapi.com");
+    this.host = removeSlash(options?.host || 'https://api.theauthapi.com');
     this.api = new ApiRequest({
       accessKey: this.accessKey,
       host: this.host,
@@ -50,7 +50,7 @@ class TheAuthAPI {
    */
   async authenticateAPIKey(
     key: string,
-    callback?: (err: any, data: any) => any
+    callback?: (err: any, data: any) => any,
   ) {
     const cb = callback || noop;
     const done = (err: any) => {
@@ -66,8 +66,8 @@ class TheAuthAPI {
     try {
       const key = await this.api.request(
         HttpMethod.POST,
-        "/auth/authenticate",
-        data
+        '/auth/authenticate',
+        data,
       );
       done(key);
       return key;

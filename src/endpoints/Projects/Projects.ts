@@ -1,7 +1,7 @@
-import ApiRequest from "../../services/ApiRequest/ApiRequest";
-import { CreateProjectInput, Project, UpdateProjectInput } from "../../types";
-import { HttpMethod } from "../../services/ApiRequest/HttpMethod";
-import { ProjectsInterface } from "./ProjectsInterface";
+import ApiRequest from '../../services/ApiRequest/ApiRequest';
+import { CreateProjectInput, Project, UpdateProjectInput } from '../../types';
+import { HttpMethod } from '../../services/ApiRequest/HttpMethod';
+import { ProjectsInterface } from './ProjectsInterface';
 
 class Projects implements ProjectsInterface {
   api: ApiRequest;
@@ -9,27 +9,27 @@ class Projects implements ProjectsInterface {
 
   constructor(apiService: ApiRequest) {
     this.api = apiService;
-    this.endpoint = "/projects";
+    this.endpoint = '/projects';
   }
 
   async getProjects(accountId: string): Promise<Project[]> {
     return await this.api.request<Project[]>(
       HttpMethod.GET,
-      `${this.endpoint}?accountId=${accountId}`
+      `${this.endpoint}?accountId=${accountId}`,
     );
   }
 
   async getProject(projectId: string): Promise<Project> {
     return await this.api.request<Project>(
       HttpMethod.GET,
-      `${this.endpoint}/${projectId}`
+      `${this.endpoint}/${projectId}`,
     );
   }
 
   async deleteProject(projectId: string): Promise<boolean> {
     return await this.api.request<boolean>(
       HttpMethod.DELETE,
-      `${this.endpoint}/${projectId}`
+      `${this.endpoint}/${projectId}`,
     );
   }
 
@@ -37,18 +37,18 @@ class Projects implements ProjectsInterface {
     return await this.api.request<Project>(
       HttpMethod.POST,
       this.endpoint,
-      project
+      project,
     );
   }
 
   async updateProject(
     projectId: string,
-    project: UpdateProjectInput
+    project: UpdateProjectInput,
   ): Promise<Project> {
     return this.api.request<Project>(
       HttpMethod.PATCH,
       `${this.endpoint}/${projectId}`,
-      project
+      project,
     );
   }
 }

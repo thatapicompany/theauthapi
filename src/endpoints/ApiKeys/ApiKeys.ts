@@ -1,13 +1,13 @@
-import { HttpMethod } from "../../services/ApiRequest/HttpMethod";
-import ApiRequest from "../../services/ApiRequest/ApiRequest";
+import { HttpMethod } from '../../services/ApiRequest/HttpMethod';
+import ApiRequest from '../../services/ApiRequest/ApiRequest';
 import {
   ApiKey,
   ApiKeyFilter,
   ApiKeyInput,
   UpdateApiKeyInput,
-} from "../../types";
-import { ApiKeysInterface } from "./ApiKeysInterface";
-import ApiResponseError from "../../services/ApiRequest/ApiResponseError";
+} from '../../types';
+import { ApiKeysInterface } from './ApiKeysInterface';
+import ApiResponseError from '../../services/ApiRequest/ApiResponseError';
 
 class ApiKeys implements ApiKeysInterface {
   api: ApiRequest;
@@ -15,7 +15,7 @@ class ApiKeys implements ApiKeysInterface {
 
   constructor(apiService: ApiRequest) {
     this.api = apiService;
-    this.endpoint = "/api-keys/";
+    this.endpoint = '/api-keys/';
   }
 
   async isValidKey(apikey: string): Promise<boolean> {
@@ -33,7 +33,7 @@ class ApiKeys implements ApiKeysInterface {
   async authenticateKey(apikey: string): Promise<ApiKey> {
     return await this.api.request<ApiKey>(
       HttpMethod.POST,
-      `/api-keys/auth/${apikey}`
+      `/api-keys/auth/${apikey}`,
     );
   }
 
@@ -45,40 +45,40 @@ class ApiKeys implements ApiKeysInterface {
   async getKey(apikey: string) {
     return await this.api.request<ApiKey>(
       HttpMethod.GET,
-      `/api-keys/${apikey}`
+      `/api-keys/${apikey}`,
     );
   }
 
   async createKey(apiKey: ApiKeyInput) {
-    return await this.api.request<ApiKey>(HttpMethod.POST, "/api-keys", apiKey);
+    return await this.api.request<ApiKey>(HttpMethod.POST, '/api-keys', apiKey);
   }
 
   async updateKey(apiKey: string, updatedKey: UpdateApiKeyInput) {
     return await this.api.request<ApiKey>(
       HttpMethod.PATCH,
       `/api-keys/${apiKey}`,
-      updatedKey
+      updatedKey,
     );
   }
 
   async deleteKey(apiKey: string) {
     return await this.api.request<boolean>(
       HttpMethod.DELETE,
-      `/api-keys/${apiKey}`
+      `/api-keys/${apiKey}`,
     );
   }
 
   async reactivateKey(apiKey: string): Promise<ApiKey> {
     return await this.api.request<ApiKey>(
       HttpMethod.PATCH,
-      `/api-keys/${apiKey}/reactivate`
+      `/api-keys/${apiKey}/reactivate`,
     );
   }
 
   async rotateKey(apiKey: string): Promise<ApiKey> {
     return await this.api.request<ApiKey>(
       HttpMethod.POST,
-      `/api-keys/${apiKey}/rotate`
+      `/api-keys/${apiKey}/rotate`,
     );
   }
 
@@ -87,8 +87,8 @@ class ApiKeys implements ApiKeysInterface {
     if (filter !== undefined) {
       filters = Object.entries(filter).map(([key, value]) => `${key}=${value}`);
     }
-    return `${this.endpoint}${filter !== undefined ? "?" : ""}${filters.join(
-      "&"
+    return `${this.endpoint}${filter !== undefined ? '?' : ''}${filters.join(
+      '&',
     )}`;
   }
 }
