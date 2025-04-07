@@ -1,6 +1,6 @@
 {
   "name": "theauthapi",
-  "version": "1.0.13",
+  "version": "1.0.15",
   "description": "Client library for TheAuthAPI.com",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
@@ -17,7 +17,10 @@
     "test": "jest --runInBand",
     "test:coverage": "jest --coverage --runInBand",
     "build": "rollup -c",
-    "prepublish": "npm run build"
+    "ci": "npm run build && npm run test",
+    "changeset": "npx changeset",
+    "prepublishOnly": "npm run ci",
+    "local-release": "changeset version && changeset publish"
   },
   "repository": {
     "type": "git",
@@ -36,6 +39,7 @@
     "remove-trailing-slash": "^0.1.1"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.28.1",
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-typescript": "^12.1.2",
