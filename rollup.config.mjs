@@ -17,7 +17,10 @@ export default [
     plugins: [
       resolve(),
       commonjs(),
-      typescript({ tsconfig: './tsconfig.json' }),
+      typescript({
+        tsconfig: './tsconfig.json',
+        declaration: false,
+      }),
     ],
   },
   {
@@ -25,21 +28,35 @@ export default [
     output: {
       file: 'dist/index.cjs',
       format: 'cjs',
-      exports: 'default',
+      exports: 'auto',
+      preserveModules: false,
     },
     external,
     plugins: [
       resolve(),
       commonjs(),
-      typescript({ tsconfig: './tsconfig.json' }),
+      typescript({
+        tsconfig: './tsconfig.json',
+        declaration: false,
+      }),
     ],
   },
   {
     input: 'src/index.ts',
     output: {
-      file: 'dist/index.d.ts',
+      file: 'dist/index.d.mts',
       format: 'es',
     },
     plugins: [dts()],
+  },
+  {
+    input: 'src/index.ts',
+    output: {
+      file: 'dist/index.d.cts',
+      format: 'cjs',
+    },
+    plugins: [
+      dts(),
+    ],
   },
 ];
