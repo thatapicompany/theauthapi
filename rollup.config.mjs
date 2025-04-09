@@ -55,8 +55,6 @@ export default [
       file: 'dist/index.d.cts',
       format: 'cjs',
     },
-    plugins: [
-      dts(),
-    ],
+    plugins: [dts()],
   },
 ];
