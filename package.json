@@ -30,10 +30,10 @@
     "build": "npm run build:rollup && npm run fix-cts",
     "build:rollup": "rollup -c",
     "fix-cts": "node scripts/convert-cts.js",
-    "ci": "npm run build && npm run test",
+    "ci": "npm run build && npm run check-format && npm run check-exports && npm run test",
     "changeset": "npx changeset",
     "prepublishOnly": "npm run ci",
-    "local-release": "changeset version && changeset publish",
+    "local-release": "npm run ci && changeset version && changeset publish",
     "format": "prettier --write .",
     "check-format": "prettier --check .",
     "check-exports": "attw --pack ."
