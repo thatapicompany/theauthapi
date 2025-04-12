@@ -1,5 +1,11 @@
 # theauthapi
 
+## 1.0.17
+
+### Patch Changes
+
+- 678bf0a: Added ./types subpath export to the package’s exports map for direct access to internal type definitions.
+
 ## 1.0.16
 
 ### Patch Changes
