@@ -8,7 +8,7 @@ try {
 
   content = content.replace(
     /export\s+\{\s*TheAuthAPI\s+as\s+default\s*\};?/,
-    'exports = TheAuthAPI;',
+    'export = TheAuthAPI;',
   );
 
   await fs.writeFile(filePath, content, 'utf-8');
