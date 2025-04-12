@@ -356,6 +356,7 @@ async function getProjectsIds(accountId: string): Promise<string[]> {
   return projects.map((project) => project.name);
 }
 ```
+⚠️ Works in Node.js 16+ and all modern bundlers. Not supported in Node.js 10–14.
 
 ### 📙 Further Reading
 
