@@ -57,4 +57,20 @@ export default [
     },
     plugins: [dts()],
   },
+  {
+    input: 'src/types/index.ts',
+    output: {
+      file: 'dist/types.d.ts',
+      format: 'es',
+    },
+    plugins: [dts()],
+  },
+  {
+    input: 'src/types/index.ts',
+    output: {
+      file: 'dist/types.d.cts',
+      format: 'es',
+    },
+    plugins: [dts()],
+  },
 ];

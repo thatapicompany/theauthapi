@@ -14,6 +14,10 @@
         "types": "./dist/index.d.cts",
         "default": "./dist/index.cjs"
       }
+    },
+    "./types": {
+      "require": "./dist/types.d.cts",
+      "types": "./dist/types.d.ts"
     }
   },
   "type": "module",
@@ -36,7 +40,9 @@
     "local-release": "npm run ci && changeset version && changeset publish",
     "format": "prettier --write .",
     "check-format": "prettier --check .",
-    "check-exports": "attw --pack ."
+    "check-exports": "npm run check-exports:all && npm run check-exports:types",
+    "check-exports:all": "npx attw --pack . --exclude-entrypoints ./types",
+    "check-exports:types": "npx attw --pack . --entrypoints ./types --profile node16"
   },
   "repository": {
     "type": "git",
