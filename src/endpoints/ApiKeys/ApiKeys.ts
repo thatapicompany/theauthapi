@@ -18,9 +18,9 @@ class ApiKeys implements ApiKeysInterface {
     this.endpoint = '/api-keys/';
   }
 
-  async isValidKey(apikey: string): Promise<boolean> {
+  async isValidKey(apikey: string, origin?: string): Promise<boolean> {
     try {
-      const key = await this.authenticateKey(apikey);
+      const key = await this.authenticateKey(apikey, origin);
       return key.key !== undefined;
     } catch (error) {
       if (error instanceof ApiResponseError && error.statusCode === 404) {
@@ -30,10 +30,13 @@ class ApiKeys implements ApiKeysInterface {
     }
   }
 
-  async authenticateKey(apikey: string): Promise<ApiKey> {
+  async authenticateKey(apikey: string, origin?: string): Promise<ApiKey> {
+    const additionalHeaders = origin ? { 'x-origin-domain': origin } : undefined;
     return await this.api.request<ApiKey>(
       HttpMethod.POST,
       `/api-keys/auth/${apikey}`,
+      undefined,
+      additionalHeaders,
     );
   }
 

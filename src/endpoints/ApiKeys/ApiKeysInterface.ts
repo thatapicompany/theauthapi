@@ -6,9 +6,9 @@ import {
 } from '../../types';
 
 export interface ApiKeysInterface {
-  isValidKey(apiKey: string): Promise<boolean>;
+  isValidKey(apiKey: string, origin?: string): Promise<boolean>;
   getKey(apiKey: string): Promise<ApiKey>;
-  authenticateKey(apiKey: string): Promise<ApiKey>;
+  authenticateKey(apiKey: string, origin?: string): Promise<ApiKey>;
   getKeys(filter?: ApiKeyFilter): Promise<ApiKey[]>;
   createKey(apiKey: ApiKeyInput): Promise<ApiKey>;
   updateKey(apiKey: string, updateTo: UpdateApiKeyInput): Promise<ApiKey>;
