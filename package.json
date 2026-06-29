@@ -1,6 +1,6 @@
 {
   "name": "theauthapi",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "Client library for TheAuthAPI.com",
   "main": "dist/index.cjs",
   "types": "dist/index.d.cts",
@@ -84,5 +84,8 @@
     "rollup-plugin-dts": "^6.2.1",
     "ts-jest": "^29.1.1",
     "typescript": "^4.9.5"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-darwin-arm64": "^4.62.2"
   }
 }
