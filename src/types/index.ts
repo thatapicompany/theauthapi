@@ -10,6 +10,7 @@ export type ApiKey = {
   isActive: boolean;
   rateLimitConfigs: RateLimitConfiguration;
   expiry: Date;
+  allowedDomains?: string[];
 };
 
 export type RateLimitConfiguration = {
@@ -26,6 +27,7 @@ export type ApiKeyInput = {
   customUserId?: string;
   rateLimitConfigs?: RateLimitConfiguration;
   expiry?: Date;
+  allowedDomains?: string[];
 };
 
 export type ApiKeyFilter = {
@@ -44,6 +46,7 @@ export type UpdateApiKeyInput = {
   customUserId?: string;
   expiry?: Date | null;
   rateLimitConfigs?: RateLimitConfiguration | null;
+  allowedDomains?: string[] | null;
 };
 
 export enum AuthedEntityType {
