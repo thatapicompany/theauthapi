@@ -70,6 +70,7 @@ class ApiRequest implements ApiCall {
     method: HttpMethod,
     endpoint: string,
     payload?: any,
+    customHeaders?: object,
   ): Promise<T> {
     try {
       const response = await axios.request<T>({
@@ -77,7 +78,9 @@ class ApiRequest implements ApiCall {
         method: method,
         url: endpoint,
         data: payload,
-        headers: this.headers,
+        headers: customHeaders
+          ? { ...this.headers, ...customHeaders }
+          : this.headers,
       });
       return response.data;
     } catch (error) {
