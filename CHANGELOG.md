@@ -1,5 +1,11 @@
 # theauthapi
 
+## 1.0.18
+
+### Patch Changes
+
+- 6a05584: fix: forward origin headers to authenticateKey gateway endpoint
+
 ## 1.0.17
 
 ### Patch Changes
